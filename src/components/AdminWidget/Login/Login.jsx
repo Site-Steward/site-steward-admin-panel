@@ -1,41 +1,55 @@
 import { useState } from "react";
-
 import VerifyCredentialsForm from "./VerifyCredentialsForm.jsx";
 import RequestResetForm from "./RequestResetForm.jsx";
+import SetPasswordForm from "./SetPasswordForm.jsx";
 
-export default function Login({ onLoggedIn }) {
+export default function Login({ onSuccess }) {
   const [mode, setMode] = useState("loggingIn");
 
   let body;
   switch (mode) {
-
     case "loggingIn":
       body = (
-        <>
-          <VerifyCredentialsForm onVerified={onLoggedIn} />;
-          <a href="#" onClick={() => setMode("requestingReset")}>
+        <div className="space-y-4">
+          <VerifyCredentialsForm onVerified={onSuccess} />
+          <button
+            onClick={() => setMode("requestingReset")}
+            className="text-sm text-blue-600 hover:text-blue-700 underline"
+          >
             Set or reset password
-          </a>
-        </>
+          </button>
+        </div>
       );
       break;
-    
+
     case "requestingReset":
-      body = <RequestResetForm
-        onCodeSent={() => setMode("settingPassword")}
-      />;
+      body = (
+        <div className="space-y-4">
+          <RequestResetForm onCodeSent={() => setMode("settingPassword")} />
+          <button
+            onClick={() => setMode("loggingIn")}
+            className="text-sm text-blue-600 hover:text-blue-700 underline"
+          >
+            Back to login
+          </button>
+        </div>
+      );
       break;
- 
+
     case "settingPassword":
-      body = <SetPasswordForm
-        onSetPassword={onLoggedIn /* call sets a session cookie */}
-      />;
+      body = (
+        <div className="space-y-4">
+          <SetPasswordForm onSetPassword={onSuccess} />
+          <button
+            onClick={() => setMode("loggingIn")}
+            className="text-sm text-blue-600 hover:text-blue-700 underline"
+          >
+            Back to login
+          </button>
+        </div>
+      );
       break;
   }
 
-  return (
-    <div className="login">
-      {body}
-    </div>
-  );
+  return <div className="login">{body}</div>;
 }

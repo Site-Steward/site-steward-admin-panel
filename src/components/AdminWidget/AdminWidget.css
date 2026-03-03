@@ -1,14 +1,20 @@
-.admin-panel {
-  background-color: rgb(255, 255, 255);
+.admin-widget {
   position: fixed;
-  bottom: 50px;
-  right: 50px;
-  width: 400px;
-  height: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 20px;
-  z-index: 1000;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.admin-welcome {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-welcome h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 600;
 }
