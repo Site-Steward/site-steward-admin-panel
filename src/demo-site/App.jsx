@@ -14,6 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { AdminWidget } from "..";
+
 function HomePage() {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -170,8 +172,13 @@ function App() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/admin" element={<AdminWidget />} />
         </Routes>
+        <AdminWidget />
       </main>
+
+     
+
     </div>
   );
 }
