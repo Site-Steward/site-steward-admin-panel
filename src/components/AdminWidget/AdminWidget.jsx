@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AssistantModal } from "@/components/assistant-ui/assistant-modal";
+
 import {
   Dialog,
   DialogContent,
@@ -9,8 +12,15 @@ import {
 } from "../ui/dialog.jsx";
 import { Button } from "../ui/button.jsx";
 import Login from "./Login/Login.jsx";
+import client from "../../util/siteStewardApiClient.js";
 
 import "./AdminWidget.css";
+
+let haveSession = false;
+try {
+  haveSession = await client.getMe();
+  haveSession = true;
+} catch (error) {}
 
 export function AdminWidget() {
   const location = useLocation();
@@ -20,6 +30,10 @@ export function AdminWidget() {
   });
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+
+  if (haveSession && !loggedIn) {
+    setLoggedIn(true);
+  }
 
   // Upon user navigation to /admin,
   // Permanently (across tabs / windows even) enable the popup
@@ -52,6 +66,12 @@ export function AdminWidget() {
     setLoginDialogOpen(true);
   }
 
+  return (
+    <TooltipProvider>
+      <AssistantModal />
+    </TooltipProvider>
+  );
+  /*
   return (
     <>
       {widgetEnabled && !loggedIn && (
@@ -90,4 +110,5 @@ export function AdminWidget() {
       </Dialog>
     </>
   );
+  */  
 }

@@ -5,6 +5,7 @@ import SetPasswordForm from "./SetPasswordForm.jsx";
 
 export default function Login({ onSuccess }) {
   const [mode, setMode] = useState("loggingIn");
+  const [emailForReset, setEmailForReset] = useState(null);
 
   let body;
   switch (mode) {
@@ -25,7 +26,10 @@ export default function Login({ onSuccess }) {
     case "requestingReset":
       body = (
         <div className="space-y-4">
-          <RequestResetForm onCodeSent={() => setMode("settingPassword")} />
+          <RequestResetForm onCodeSent={(email) => {
+            setEmailForReset(email);
+            setMode("settingPassword");
+          }} />
           <button
             onClick={() => setMode("loggingIn")}
             className="text-sm text-blue-600 hover:text-blue-700 underline"
@@ -39,7 +43,7 @@ export default function Login({ onSuccess }) {
     case "settingPassword":
       body = (
         <div className="space-y-4">
-          <SetPasswordForm onSetPassword={onSuccess} />
+          <SetPasswordForm email={emailForReset} onSetPassword={onSuccess} />
           <button
             onClick={() => setMode("loggingIn")}
             className="text-sm text-blue-600 hover:text-blue-700 underline"

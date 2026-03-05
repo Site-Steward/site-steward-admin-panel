@@ -3,9 +3,9 @@ import { Button } from "../../ui/button.jsx";
 import { Label } from "../../ui/label.jsx";
 import ApiForm from "../../ApiForm/ApiForm";
 
-export default function SetPasswordForm({ onSetPassword }) {
+export default function SetPasswordForm({ email, onSetPassword }) {
   return (
-    <ApiForm apiMethod="setPassword" onSuccess={onSetPassword}>
+    <ApiForm apiMethod="setPassword" onSuccess={onSetPassword} extraArgs={{ email }}>
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="code">Verification Code</Label>

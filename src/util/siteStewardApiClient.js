@@ -1,9 +1,6 @@
-
-
 class SiteStewardApiClient {
   constructor({
     baseUrl,
-    fetchImpl = fetch,
     defaultHeaders = {},
     credentials = "include",
   }) {
@@ -12,7 +9,6 @@ class SiteStewardApiClient {
     }
 
     this.baseUrl = trimTrailingSlash(baseUrl);
-    this.fetchImpl = fetchImpl;
     this.defaultHeaders = defaultHeaders;
     this.credentials = credentials;
   }
@@ -42,7 +38,7 @@ class SiteStewardApiClient {
       }
     }
 
-    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+    const response = await fetch(`${this.baseUrl}${path}`, {
       method,
       headers: requestHeaders,
       body: serializedBody,
@@ -79,7 +75,6 @@ class SiteStewardApiClient {
     return this.request("/health");
   }
 
-
   // AUTH
 
   requestPasswordReset(args) {
@@ -112,7 +107,6 @@ class SiteStewardApiClient {
   getMe() {
     return this.request("/v1/me");
   }
-
 
   // TASK
 
@@ -150,7 +144,6 @@ class SiteStewardApiClient {
     });
   }
 
-  
   // ASSET
 
   createAsset({ filename, mime, size, sha256 }) {
@@ -183,7 +176,6 @@ class SiteStewardApiClient {
 export { SiteStewardApiError };
 
 class SiteStewardApiError extends Error {
-
   constructor(message, { status, statusText, body, method, path } = {}) {
     super(message);
     this.name = "SiteStewardApiError";
@@ -200,9 +192,11 @@ function trimTrailingSlash(value) {
 }
 
 function isJsonContentType(contentType) {
-  return typeof contentType === "string" && contentType.includes("application/json");
+  return (
+    typeof contentType === "string" && contentType.includes("application/json")
+  );
 }
 
 export default new SiteStewardApiClient({
-  baseUrl: import.meta.env.VITE_SITE_STEWARD_API_BASE_URL
+  baseUrl: import.meta.env.VITE_SITE_STEWARD_API_BASE_URL,
 });
