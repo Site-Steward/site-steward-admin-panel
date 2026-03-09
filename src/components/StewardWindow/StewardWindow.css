@@ -1,0 +1,76 @@
+.steward-window {
+  
+  /* external layout */
+  z-index: 1000000000;
+  position: fixed;
+  bottom: 120px;
+  right: 120px;
+  width: 800px;
+  height: 600px;
+  
+  /* internal layout */
+  &:has(aside) {
+    display: grid;
+    grid-template: 
+       "titlebar  titlebar" auto
+       "sidebar   content" 1fr
+    /   200px     1fr;
+  }
+  &:not(:has(aside)) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* decoration */
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+  aside {
+    grid-area: "sidebar";
+  }
+
+  main {
+    grid-area: "content";
+  }
+
+  .titlebar {
+
+    /* external layout */
+    grid-area: "titlebar";
+    height: 40px;
+
+    /* internal layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+  
+    /* decoration */
+    background-color: rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(200, 200, 200);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    
+    h1 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      button {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+      }
+    }
+  }
+
+}

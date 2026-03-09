@@ -1,14 +1,17 @@
 import client from "../../util/siteStewardApiClient";
+import "./ApiForm.css";
 
 export default function ApiForm({
   children,
   apiMethod,
-  onSuccess }) {
+  onSuccess,
+  extraArgs = {},
+}) {
   
   const submit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const args = Object.fromEntries(formData);
+    const args = { ...Object.fromEntries(formData), ...extraArgs };
     const result = await client[apiMethod](args);
     if (onSuccess) {
       onSuccess(result);
@@ -16,9 +19,8 @@ export default function ApiForm({
   };
 
   return (
-    <form action={submit}>
+    <form className="api-form" action={submit}>
       {children /* expect one input per arg passed to apiMethod */}
-      <button type="submit">Submit</button>
     </form>
   );
 }

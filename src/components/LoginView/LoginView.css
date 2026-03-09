@@ -1,0 +1,39 @@
+.login-view {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.login-view__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-view__secondary-action {
+  align-self: flex-start;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.login-view__secondary-action:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.login-view__secondary-action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.3);
+}

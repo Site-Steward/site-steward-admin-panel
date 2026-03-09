@@ -1,0 +1,76 @@
+.api-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.api-form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.api-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.api-form input,
+.api-form textarea,
+.api-form select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.api-form input::placeholder,
+.api-form textarea::placeholder {
+  color: #9ca3af;
+}
+
+.api-form input:focus,
+.api-form textarea:focus,
+.api-form select:focus {
+  outline: none;
+  border-color: #9ca3af;
+  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.25);
+}
+
+.api-form button[type="submit"] {
+  align-self: flex-start;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  background: #4b5563;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.api-form button[type="submit"]:hover {
+  background: #374151;
+  border-color: #374151;
+}
+
+.api-form button[type="submit"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.3);
+}
+
+.api-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
