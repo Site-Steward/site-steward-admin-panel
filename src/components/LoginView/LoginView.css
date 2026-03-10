@@ -1,13 +1,22 @@
 .login-view {
   main {
+    /* --form-width: clamp(300px, 80%, 500px); */
+    --form-width: 400px;
 
     /* external layout */
+    height: 100%;
 
     /* internal layout */
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 12px;
-    padding-inline: 20%;
+    padding-inline: calc((100% - var(--form-width)) / 2);
+  }
+
+  form {
+    width: var(--form-width);
   }
 
   .logo {
@@ -18,6 +27,7 @@
   }
 
   h2 {
+    width: fit-content;
     text-align: center;
     color: #111827;
     font-size: 24px;

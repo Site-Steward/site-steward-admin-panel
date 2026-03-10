@@ -46,6 +46,8 @@
   .titlebar {
     position: relative;
     z-index: 2;
+    cursor: move;
+    touch-action: none;
 
     /* external layout */
     grid-area: titlebar;
@@ -158,6 +160,10 @@
   }
 
   &.is-resizing {
+    user-select: none;
+  }
+
+  &.is-dragging {
     user-select: none;
   }
 }

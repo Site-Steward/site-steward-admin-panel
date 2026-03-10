@@ -17,6 +17,11 @@ const DEFAULT_WINDOW_SIZE = Object.freeze({
   height: 600,
 });
 
+const DEFAULT_WINDOW_POSITION = Object.freeze({
+  right: 120,
+  bottom: 120,
+});
+
 export function AdminWidget() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -81,9 +86,13 @@ export function AdminWidget() {
       }
       displayView={<main>{displayView}</main>}
       windowSize={widgetState.windowSize}
+      windowPosition={widgetState.windowPosition}
       onMinimize={() => updateWidgetState({ minimized: true }, setWidgetState)}
       onResize={(windowSize) =>
         updateWidgetState({ windowSize }, setWidgetState)
+      }
+      onMove={(windowPosition) =>
+        updateWidgetState({ windowPosition }, setWidgetState)
       }
       onClose={() => {
         if (currentView.type === "logout") {
@@ -114,10 +123,15 @@ function getStoredState() {
       activated: false,
       minimized: false,
       windowSize: { ...DEFAULT_WINDOW_SIZE },
+      windowPosition: { ...DEFAULT_WINDOW_POSITION },
       ...parsed,
       windowSize: {
         ...DEFAULT_WINDOW_SIZE,
         ...(parsed.windowSize ?? {}),
+      },
+      windowPosition: {
+        ...DEFAULT_WINDOW_POSITION,
+        ...(parsed.windowPosition ?? {}),
       },
     };
   }
@@ -125,6 +139,7 @@ function getStoredState() {
     activated: false,
     minimized: false,
     windowSize: { ...DEFAULT_WINDOW_SIZE },
+    windowPosition: { ...DEFAULT_WINDOW_POSITION },
   };
 }
 
