@@ -3,6 +3,7 @@ import VerifyCredentialsForm from "./VerifyCredentialsForm.jsx";
 import RequestResetForm from "./RequestResetForm.jsx";
 import SetPasswordForm from "./SetPasswordForm.jsx";
 import "./LoginView.css";
+import stewardCounterLogo from "../../assets/counter_326x167.png";
 
 export default function LoginView({ onSuccess }) {
   const [mode, setMode] = useState("loggingIn");
@@ -12,22 +13,22 @@ export default function LoginView({ onSuccess }) {
   switch (mode) {
     case "loggingIn":
       body = (
-        <div className="login-view__section">
+        <>
           <VerifyCredentialsForm onVerified={onSuccess} />
           <button
-            className="login-view__secondary-action"
+            className="secondary"
             onClick={() => setMode("requestingReset")}
             type="button"
           >
             Set or reset password
           </button>
-        </div>
+        </>
       );
       break;
 
     case "requestingReset":
       body = (
-        <div className="login-view__section">
+        <>
           <RequestResetForm
             onCodeSent={(email) => {
               setEmailForReset(email);
@@ -35,31 +36,41 @@ export default function LoginView({ onSuccess }) {
             }}
           />
           <button
-            className="login-view__secondary-action"
+            className="secondary"
             onClick={() => setMode("loggingIn")}
             type="button"
           >
             Back to login
           </button>
-        </div>
+        </>
       );
       break;
 
     case "settingPassword":
       body = (
-        <div className="login-view__section">
+        <>
           <SetPasswordForm email={emailForReset} onSetPassword={onSuccess} />
           <button
-            className="login-view__secondary-action"
+            className="secondary"
             onClick={() => setMode("loggingIn")}
             type="button"
           >
             Back to login
           </button>
-        </div>
+        </>
       );
       break;
   }
 
-  return <div className="login-view">{body}</div>;
+  return (
+    <>
+      <img
+        src={stewardCounterLogo}
+        alt="Steward Logo"
+        className="logo"
+      />
+      <h2>Welcome back...</h2>
+      {body}
+    </>
+  );
 }

@@ -9,6 +9,7 @@ import ToggleButton from "./ToggleButton/ToggleButton.jsx";
 import LogoutView from "./LogoutView/LogoutView.jsx";
 import AsideMenu from "./AsideMenu/AsideMenu.jsx";
 
+import "../global.css";
 import "./AdminWidget.css";
 
 export function AdminWidget() {

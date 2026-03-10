@@ -7,7 +7,6 @@ export default function ApiForm({
   onSuccess,
   extraArgs = {},
 }) {
-  
   const submit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
