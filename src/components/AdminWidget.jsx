@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import client from "../util/siteStewardApiClient.js";
 
@@ -12,11 +12,16 @@ import AsideMenu from "./AsideMenu/AsideMenu.jsx";
 import "../global.css";
 import "./AdminWidget.css";
 
+const DEFAULT_WINDOW_SIZE = Object.freeze({
+  width: 800,
+  height: 600,
+});
+
 export function AdminWidget() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [widgetState, setWidgetState] = useState(getStoredState());
-  const [currentView, setCurrentView] = useState({type: "login"});
+  const [widgetState, setWidgetState] = useState(() => getStoredState());
+  const [currentView, setCurrentView] = useState({ type: "login" });
 
   // Activate on when /admin route detected; the consumer must make this
   // route navigable, typically as an alternate path to home "/"
@@ -75,8 +80,10 @@ export function AdminWidget() {
         ) : null
       }
       displayView={<main>{displayView}</main>}
-      onMinimize={() => updateWidgetState(
-        { minimized: true }, setWidgetState)
+      windowSize={widgetState.windowSize}
+      onMinimize={() => updateWidgetState({ minimized: true }, setWidgetState)}
+      onResize={(windowSize) =>
+        updateWidgetState({ windowSize }, setWidgetState)
       }
       onClose={() => {
         if (currentView.type === "logout") {
@@ -91,7 +98,6 @@ export function AdminWidget() {
   );
 }
 
-
 function updateWidgetState(patchObject, setWidgetState) {
   setWidgetState((prev) => {
     const newState = { ...prev, ...patchObject };
@@ -103,11 +109,24 @@ function updateWidgetState(patchObject, setWidgetState) {
 function getStoredState() {
   const jsonSerialized = localStorage.getItem("steward_widget_state");
   if (jsonSerialized) {
-    return JSON.parse(jsonSerialized);
+    const parsed = JSON.parse(jsonSerialized);
+    return {
+      activated: false,
+      minimized: false,
+      windowSize: { ...DEFAULT_WINDOW_SIZE },
+      ...parsed,
+      windowSize: {
+        ...DEFAULT_WINDOW_SIZE,
+        ...(parsed.windowSize ?? {}),
+      },
+    };
   }
-  return { activated: false, minimized: false };
+  return {
+    activated: false,
+    minimized: false,
+    windowSize: { ...DEFAULT_WINDOW_SIZE },
+  };
 }
-
 
 /**
  * Enables widget overlay on all pages, persisting across browser

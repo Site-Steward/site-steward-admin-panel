@@ -1,20 +1,24 @@
 .steward-window {
-  
+  --titlebar-height: 40px;
+  --resize-hit-size: 12px;
+
   /* external layout */
   z-index: 1000000000;
   position: fixed;
   bottom: 120px;
   right: 120px;
-  width: 800px;
-  height: 600px;
-  
+  min-width: 560px;
+  min-height: 360px;
+  box-sizing: border-box;
+  overflow: hidden;
+
   /* internal layout */
   &:has(aside) {
     display: grid;
-    grid-template: 
-       "titlebar  titlebar" auto
-       "sidebar   content" 1fr
-    /   200px     1fr;
+    grid-template:
+      "titlebar  titlebar" auto
+      "sidebar   content" 1fr
+      / 200px minmax(0, 1fr);
   }
   &:not(:has(aside)) {
     display: flex;
@@ -26,33 +30,39 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-
   aside {
-    grid-area: "sidebar";
+    grid-area: sidebar;
+    min-width: 0;
+    overflow: auto;
   }
 
   main {
-    grid-area: "content";
+    grid-area: content;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
   }
 
   .titlebar {
+    position: relative;
+    z-index: 2;
 
     /* external layout */
-    grid-area: "titlebar";
-    height: 40px;
+    grid-area: titlebar;
+    height: var(--titlebar-height);
 
     /* internal layout */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-  
+
     /* decoration */
     background-color: rgb(240, 240, 240);
     border-bottom: 1px solid rgb(200, 200, 200);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    
+
     h1 {
       font-size: 16px;
       margin: 0;
@@ -61,6 +71,7 @@
     .controls {
       display: flex;
       gap: 8px;
+
       button {
         width: 24px;
         height: 24px;
@@ -73,4 +84,80 @@
     }
   }
 
+  .resize-handle {
+    position: absolute;
+    z-index: 3;
+    touch-action: none;
+    background: transparent;
+  }
+
+  .resize-handle-top,
+  .resize-handle-bottom {
+    left: var(--resize-hit-size);
+    right: var(--resize-hit-size);
+    height: var(--resize-hit-size);
+  }
+
+  .resize-handle-left,
+  .resize-handle-right {
+    top: var(--resize-hit-size);
+    bottom: var(--resize-hit-size);
+    width: var(--resize-hit-size);
+  }
+
+  .resize-handle-top {
+    top: 0;
+    cursor: ns-resize;
+  }
+
+  .resize-handle-right {
+    right: 0;
+    cursor: ew-resize;
+  }
+
+  .resize-handle-bottom {
+    bottom: 0;
+    cursor: ns-resize;
+  }
+
+  .resize-handle-left {
+    left: 0;
+    cursor: ew-resize;
+  }
+
+  .resize-handle-top-left,
+  .resize-handle-top-right,
+  .resize-handle-bottom-right,
+  .resize-handle-bottom-left {
+    width: calc(var(--resize-hit-size) * 1.5);
+    height: calc(var(--resize-hit-size) * 1.5);
+  }
+
+  .resize-handle-top-left {
+    top: 0;
+    left: 0;
+    cursor: nwse-resize;
+  }
+
+  .resize-handle-top-right {
+    top: 0;
+    right: 0;
+    cursor: nesw-resize;
+  }
+
+  .resize-handle-bottom-right {
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+  }
+
+  .resize-handle-bottom-left {
+    bottom: 0;
+    left: 0;
+    cursor: nesw-resize;
+  }
+
+  &.is-resizing {
+    user-select: none;
+  }
 }
