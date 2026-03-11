@@ -133,14 +133,10 @@ export default function StewardWindow({
   }, [size]);
 
   useEffect(() => {
-    if (!activeHandle) {
-      return undefined;
-    }
+    if (!activeHandle) return undefined;
 
     const resizeSession = resizeSessionRef.current;
-    if (!resizeSession) {
-      return undefined;
-    }
+    if (!resizeSession) return undefined;
 
     const previousCursor = document.body.style.cursor;
     const previousUserSelect = document.body.style.userSelect;
@@ -151,26 +147,50 @@ export default function StewardWindow({
       const deltaX = event.clientX - resizeSession.startX;
       const deltaY = event.clientY - resizeSession.startY;
 
+      const dir = resizeSession.direction || "";
+      const left = dir.includes("left");
+      const right = dir.includes("right");
+      const top = dir.includes("top");
+      const bottom = dir.includes("bottom");
+
       let nextWidth = resizeSession.startSize.width;
       let nextHeight = resizeSession.startSize.height;
 
-      if (resizeSession.direction.includes("left")) {
+      if (left && !right) {
         nextWidth = resizeSession.startSize.width - deltaX;
-      }
-
-      if (resizeSession.direction.includes("right")) {
+      } else if (right && !left) {
         nextWidth = resizeSession.startSize.width + deltaX;
       }
 
-      if (resizeSession.direction.includes("top")) {
+      if (top && !bottom) {
         nextHeight = resizeSession.startSize.height - deltaY;
-      }
-
-      if (resizeSession.direction.includes("bottom")) {
+      } else if (bottom && !top) {
         nextHeight = resizeSession.startSize.height + deltaY;
       }
 
-      setSize(getViewportBoundedSize({ width: nextWidth, height: nextHeight }));
+      const bounded = getViewportBoundedSize({
+        width: nextWidth,
+        height: nextHeight,
+      });
+
+      const startPos = resizeSession.startPosition || positionRef.current;
+      const nextPosition = { ...startPos };
+
+      // If resizing from right/bottom, adjust `right`/`bottom` so the opposite corner stays fixed.
+      if (right && !left) {
+        const widthDelta = bounded.width - resizeSession.startSize.width;
+        nextPosition.right = startPos.right - widthDelta;
+      }
+
+      if (bottom && !top) {
+        const heightDelta = bounded.height - resizeSession.startSize.height;
+        nextPosition.bottom = startPos.bottom - heightDelta;
+      }
+
+      const boundedPos = getViewportBoundedPosition(nextPosition, bounded);
+
+      setSize(bounded);
+      setPosition(boundedPos);
     };
 
     const handlePointerUp = () => {
@@ -255,19 +275,21 @@ export default function StewardWindow({
   }, []);
 
   const resizeHandleProps = useMemo(() => {
+    const cursorMap = {
+      top: "ns-resize",
+      right: "ew-resize",
+      bottom: "ns-resize",
+      left: "ew-resize",
+      "top-left": "nwse-resize",
+      "top-right": "nesw-resize",
+      "bottom-right": "nwse-resize",
+      "bottom-left": "nesw-resize",
+    };
+
     return RESIZE_HANDLES.map((direction) => ({
       direction,
       className: `resize-handle resize-handle-${direction}`,
-      cursor:
-        direction.includes("top") || direction.includes("bottom")
-          ? direction.includes("left")
-            ? "nwse-resize"
-            : direction.includes("right")
-              ? "nesw-resize"
-              : "ns-resize"
-          : direction.includes("left") || direction.includes("right")
-            ? "ew-resize"
-            : "default",
+      cursor: cursorMap[direction] || "default",
     }));
   }, []);
 
@@ -280,9 +302,9 @@ export default function StewardWindow({
       cursor,
       startX: event.clientX,
       startY: event.clientY,
-      startSize: sizeRef.current,
+      startSize: { ...sizeRef.current },
+      startPosition: positionRef.current,
     };
-    sizeRef.current = sizeRef.current;
     setActiveHandle(direction);
   };
 
