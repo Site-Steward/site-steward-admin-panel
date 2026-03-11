@@ -1,3 +1,12 @@
+.steward-window-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999999;
+  pointer-events: none;
+  backdrop-filter: blur(1px);
+  background: rgba(24, 24, 24, 0.3);
+}
+
 .steward-window {
   --titlebar-height: 40px;
   --resize-hit-size: 12px;
@@ -28,7 +37,8 @@
   /* decoration */
   background-color: rgb(255, 255, 255);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+  border: 2px solid rgb(43 23 134);
 
   aside {
     grid-area: sidebar;

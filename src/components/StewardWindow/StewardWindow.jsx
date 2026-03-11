@@ -324,38 +324,41 @@ export default function StewardWindow({
   };
 
   return (
-    <div
-      className={`steward-window ${extraClasses} ${activeHandle ? "is-resizing" : ""} ${isDragging ? "is-dragging" : ""}`}
-      style={{
-        width: `${size.width}px`,
-        height: `${size.height}px`,
-        right: `${position.right}px`,
-        bottom: `${position.bottom}px`,
-      }}
-    >
-      {resizeHandleProps.map(({ direction, className, cursor }) => (
-        <div
-          key={direction}
-          className={className}
-          onPointerDown={handleResizeStart(direction, cursor)}
-        />
-      ))}
-      <div className="titlebar" onPointerDown={handleDragStart}>
-        <h1>Admin Panel</h1>
-        <div className="controls">
-          <button className="minimize" onClick={onMinimize}>
-            <Minus />
-          </button>
-          <button className="maximize">
-            <Fullscreen />
-          </button>
-          <button className="close" onClick={onClose}>
-            <X />
-          </button>
+    <>
+      <div className="steward-window-backdrop" aria-hidden="true" />
+      <div
+        className={`steward-window ${extraClasses} ${activeHandle ? "is-resizing" : ""} ${isDragging ? "is-dragging" : ""}`}
+        style={{
+          width: `${size.width}px`,
+          height: `${size.height}px`,
+          right: `${position.right}px`,
+          bottom: `${position.bottom}px`,
+        }}
+      >
+        {resizeHandleProps.map(({ direction, className, cursor }) => (
+          <div
+            key={direction}
+            className={className}
+            onPointerDown={handleResizeStart(direction, cursor)}
+          />
+        ))}
+        <div className="titlebar" onPointerDown={handleDragStart}>
+          <h1>Admin Panel</h1>
+          <div className="controls">
+            <button className="minimize" onClick={onMinimize}>
+              <Minus />
+            </button>
+            <button className="maximize">
+              <Fullscreen />
+            </button>
+            <button className="close" onClick={onClose}>
+              <X />
+            </button>
+          </div>
         </div>
+        {sidebar}
+        {displayView}
       </div>
-      {sidebar}
-      {displayView}
-    </div>
+    </>
   );
 }
