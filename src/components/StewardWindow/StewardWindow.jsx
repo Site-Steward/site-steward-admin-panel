@@ -79,7 +79,7 @@ function getViewportBoundedPosition(nextPosition, size) {
 
 export default function StewardWindow({
   appearance = {},
-  sidebar = null,
+  activityBar = null,
   focalView = null,
   windowSize = DEFAULT_WINDOW_SIZE,
   windowPosition = DEFAULT_WINDOW_POSITION,
@@ -374,7 +374,7 @@ export default function StewardWindow({
             )}
           </div>
         </div>
-        {sidebar}
+        {activityBar}
         {focalView}
       </div>
     </>

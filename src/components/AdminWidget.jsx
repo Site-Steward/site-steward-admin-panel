@@ -5,8 +5,11 @@ import client from "../util/siteStewardApiClient.js";
 import StewardWindow from "./StewardWindow/StewardWindow.jsx";
 import AuthView from "./AuthView/AuthView.jsx";
 import TaskView from "./TaskView/TaskView.jsx";
+import HistoryView from "./HistoryView/HistoryView.jsx";
+import ToolsView from "./ToolsView/ToolsView.jsx";
+import SettingsView from "./SettingsView/SettingsView.jsx";
 import ToggleButton from "./ToggleButton/ToggleButton.jsx";
-import AsideMenu from "./AsideMenu/AsideMenu.jsx";
+import ActivityBar from "./ActivityBar/ActivityBar.jsx";
 
 import "../global.css";
 import "./AdminWidget.css";
@@ -47,11 +50,26 @@ export function AdminWidget() {
     );
   }
 
-  let focalView, showSidebar, windowAppearance = {};
+  let focalView, showActivityBar, windowAppearance = {};
   switch (currentView.type) {
     case "task":
       focalView = <TaskView taskId={currentView.taskId} />;
-      showSidebar = true;
+      showActivityBar = true;
+      break;
+
+    case "history":
+      focalView = <HistoryView />;
+      showActivityBar = true;
+      break;
+
+    case "tools":
+      focalView = <ToolsView />;
+      showActivityBar = true;
+      break;
+
+    case "settings":
+      focalView = <SettingsView />;
+      showActivityBar = true;
       break;
 
     case "logout":
@@ -62,7 +80,7 @@ export function AdminWidget() {
           onCancel={() => setCurrentView({ type: "task" })}
         />
       );
-      showSidebar = false;
+      showActivityBar = false;
       windowAppearance = {
         toolbar: {
           showMinimize: false,
@@ -80,7 +98,7 @@ export function AdminWidget() {
           onCancel={() => deactivateWidget({ setWidgetState })}
         />
       );
-      showSidebar = false;
+      showActivityBar = false;
       windowAppearance = {
         toolbar: {
           showMinimize: false,
@@ -95,10 +113,13 @@ export function AdminWidget() {
     <StewardWindow
       appearance={windowAppearance}
       extraClasses={`${currentView.type}-view`}
-      sidebar={
-        showSidebar ? (
+      activityBar={
+        showActivityBar ? (
           <aside>
-            <AsideMenu onSelect={(view) => setCurrentView(view)} />
+            <ActivityBar
+              activeView={currentView.type}
+              onSelect={(view) => setCurrentView(view)}
+            />
           </aside>
         ) : null
       }

@@ -1,0 +1,43 @@
+.activity-bar {
+  height: 100%;
+  background: rgb(246, 246, 246);
+  border-right: 1px solid rgb(214, 214, 214);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 10px 0;
+}
+
+.activity-bar-top-items {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.activity-bar-item {
+  position: relative;
+  width: 100%;
+  min-height: 44px;
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: rgb(72, 72, 72);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 120ms ease, color 120ms ease,
+    border-left-color 120ms ease;
+}
+
+.activity-bar-item:hover {
+  background: rgb(232, 232, 232);
+  color: rgb(43 23 134);
+}
+
+.activity-bar-item.is-active {
+  border-left-color: rgb(43 23 134);
+  background: rgb(234, 232, 247);
+  color: rgb(43 23 134);
+}

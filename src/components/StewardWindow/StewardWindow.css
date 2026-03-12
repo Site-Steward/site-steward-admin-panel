@@ -26,8 +26,8 @@
     display: grid;
     grid-template:
       "titlebar  titlebar" auto
-      "sidebar   content" 1fr
-      / 200px minmax(0, 1fr);
+      "activitybar content" 1fr
+      / 56px minmax(0, 1fr);
   }
   &:not(:has(aside)) {
     display: flex;
@@ -41,7 +41,7 @@
   border: 2px solid rgb(43 23 134);
 
   aside {
-    grid-area: sidebar;
+    grid-area: activitybar;
     min-width: 0;
     overflow: auto;
   }
