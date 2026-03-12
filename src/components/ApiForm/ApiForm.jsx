@@ -5,13 +5,20 @@ export default function ApiForm({
   children,
   apiMethod,
   onSuccess,
+  onError,
   extraArgs = {},
 }) {
   const submit = async (formData) => {
     const args = { ...Object.fromEntries(formData), ...extraArgs };
-    const result = await client[apiMethod](args);
-    if (onSuccess) {
-      onSuccess(result);
+
+    try {
+      const result = await client[apiMethod](args);
+      if (onSuccess) {
+        onSuccess(result);
+      }
+    } catch (error) {
+      onError?.(error);
+      console.warn(`API call ${apiMethod} failed`, error);
     }
   };
 

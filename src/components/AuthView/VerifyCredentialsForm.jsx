@@ -1,8 +1,20 @@
 import ApiForm from "../ApiForm/ApiForm.jsx";
+import Alert from "../Alert/Alert.jsx";
+import { useState } from "react";
 
 export default function VerifyCredentialsForm({ onVerified, onResetPassword }) {
+
+  const [alertMessage, setAlertMessage] = useState(null);
+
   return (
-    <ApiForm apiMethod="loginWithPassword" onSuccess={onVerified}>
+    <ApiForm
+      apiMethod="loginWithPassword"
+      onSuccess={onVerified}
+      onError={() => setAlertMessage({
+        severity: "error",
+        details: "Login failed"
+      })}
+    >
       <div>
         <div>
           <label htmlFor="email">Email</label>
@@ -26,6 +38,7 @@ export default function VerifyCredentialsForm({ onVerified, onResetPassword }) {
             required
           />
         </div>
+        <Alert details={alertMessage?.details} severity={alertMessage?.severity} />
         <div className="button-row">
           <button className="ui" type="submit">
             Login
