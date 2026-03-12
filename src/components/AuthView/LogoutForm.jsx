@@ -3,7 +3,7 @@ import ApiForm from "../ApiForm/ApiForm.jsx";
 export default function LogoutForm({ onConfirmed, onCancel }) {
   return (
     <ApiForm apiMethod="logout" onSuccess={onConfirmed}>
-      <div style={styles.buttonRow}>
+      <div className="button-row">
         <button className="ui" type="submit">Confirm</button>
         <button className="ui secondary" type="button" onClick={onCancel}>
           Cancel
@@ -12,12 +12,3 @@ export default function LogoutForm({ onConfirmed, onCancel }) {
     </ApiForm>
   );
 }
-
-const styles = {
-  buttonRow: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: "1rem",
-  }
-};

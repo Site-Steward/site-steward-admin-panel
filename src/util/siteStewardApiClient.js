@@ -3,7 +3,6 @@
 class SiteStewardApiClient {
   constructor({
     baseUrl,
-    fetchImpl = fetch,
     defaultHeaders = {},
     credentials = "include",
   }) {
@@ -12,7 +11,6 @@ class SiteStewardApiClient {
     }
 
     this.baseUrl = trimTrailingSlash(baseUrl);
-    this.fetchImpl = fetchImpl;
     this.defaultHeaders = defaultHeaders;
     this.credentials = credentials;
   }
@@ -42,7 +40,7 @@ class SiteStewardApiClient {
       }
     }
 
-    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+    const response = await fetch(`${this.baseUrl}${path}`, {
       method,
       headers: requestHeaders,
       body: serializedBody,

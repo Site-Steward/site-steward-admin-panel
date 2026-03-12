@@ -7,9 +7,7 @@ export default function ApiForm({
   onSuccess,
   extraArgs = {},
 }) {
-  const submit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
+  const submit = async (formData) => {
     const args = { ...Object.fromEntries(formData), ...extraArgs };
     const result = await client[apiMethod](args);
     if (onSuccess) {

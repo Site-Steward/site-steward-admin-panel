@@ -1,6 +1,6 @@
 import ApiForm from "../ApiForm/ApiForm.jsx";
 
-export default function VerifyCredentialsForm({ onVerified }) {
+export default function VerifyCredentialsForm({ onVerified, onResetPassword }) {
   return (
     <ApiForm apiMethod="loginWithPassword" onSuccess={onVerified}>
       <div>
@@ -26,7 +26,18 @@ export default function VerifyCredentialsForm({ onVerified }) {
             required
           />
         </div>
-        <button className="ui" type="submit">Login</button>
+        <div className="button-row">
+          <button className="ui" type="submit">
+            Login
+          </button>
+          <button
+            className="ui secondary"
+            onClick={onResetPassword}
+            type="button"
+          >
+            Set or reset password
+          </button>
+        </div>
       </div>
     </ApiForm>
   );

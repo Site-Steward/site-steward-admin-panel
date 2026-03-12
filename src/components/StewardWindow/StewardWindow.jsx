@@ -78,8 +78,9 @@ function getViewportBoundedPosition(nextPosition, size) {
 }
 
 export default function StewardWindow({
+  appearance = {},
   sidebar = null,
-  displayView = null,
+  focalView = null,
   windowSize = DEFAULT_WINDOW_SIZE,
   windowPosition = DEFAULT_WINDOW_POSITION,
   onMinimize,
@@ -88,6 +89,17 @@ export default function StewardWindow({
   onClose,
   extraClasses = "",
 }) {
+  appearance = {
+    ...{
+      toolbar: {
+        showMinimize: true,
+        showMaximize: true,
+        showClose: true,
+      },
+    },
+    ...appearance,
+  };
+
   const [size, setSize] = useState(() => getViewportBoundedSize(windowSize));
   const [activeHandle, setActiveHandle] = useState(null);
   const [position, setPosition] = useState(() =>
@@ -345,19 +357,25 @@ export default function StewardWindow({
         <div className="titlebar" onPointerDown={handleDragStart}>
           <h1>Admin Panel</h1>
           <div className="controls">
-            <button className="minimize" onClick={onMinimize}>
-              <Minus />
-            </button>
-            <button className="maximize">
-              <Fullscreen />
-            </button>
-            <button className="close" onClick={onClose}>
-              <X />
-            </button>
+            {appearance.toolbar.showMinimize && (
+              <button className="minimize" onClick={onMinimize}>
+                <Minus />
+              </button>
+            )}
+            {appearance.toolbar.showMaximize && (
+              <button className="maximize">
+                <Fullscreen />
+              </button>
+            )}
+            {appearance.toolbar.showClose && (
+              <button className="close" onClick={onClose}>
+                <X />
+              </button>
+            )}
           </div>
         </div>
         {sidebar}
-        {displayView}
+        {focalView}
       </div>
     </>
   );

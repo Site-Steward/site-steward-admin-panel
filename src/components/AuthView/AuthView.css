@@ -12,7 +12,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 20px;
     padding-inline: calc((100% - var(--form-width)) / 2);
   }
 
@@ -24,7 +24,6 @@
     align-self: center;
     width: 300px;
     height: auto;
-    margin-bottom: 24px;
   }
 
   h2 {
@@ -33,30 +32,5 @@
     color: #111827;
     font-size: 24px;
     margin: 0;
-  }
-
-  .secondary {
-    align-self: flex-start;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #374151;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease;
-  }
-
-  .secondary:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-  }
-
-  .secondary:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.3);
   }
 }

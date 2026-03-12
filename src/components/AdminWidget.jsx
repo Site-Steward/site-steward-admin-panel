@@ -30,7 +30,7 @@ export function AdminWidget() {
   // Activate on when /admin route detected; the consumer must make this
   // route navigable, typically as an alternate path to home "/"
   useEffect(() => {
-    if (location.pathname !== "/admin") {
+    if (location.pathname === "/admin" && !widgetState.activated) {
       activateWidget({ setWidgetState, navigate });
     }
   }, [location.pathname, navigate]);
@@ -47,15 +47,15 @@ export function AdminWidget() {
     );
   }
 
-  let displayView, showSidebar;
+  let focalView, showSidebar, windowAppearance = {};
   switch (currentView.type) {
     case "task":
-      displayView = <TaskView taskId={currentView.taskId} />;
+      focalView = <TaskView taskId={currentView.taskId} />;
       showSidebar = true;
       break;
 
     case "logout":
-      displayView = (
+      focalView = (
         <AuthView
           isLogout={true}
           onSuccess={() => deactivateWidget({ setWidgetState })}
@@ -63,19 +63,37 @@ export function AdminWidget() {
         />
       );
       showSidebar = false;
+      windowAppearance = {
+        toolbar: {
+          showMinimize: false,
+          showMaximize: false,
+          showClose: false,
+        },
+      };
       break;
 
     case "login":
     default:
-      displayView = (
-        <AuthView onSuccess={() => setCurrentView({ type: "task" })} />
+      focalView = (
+        <AuthView
+          onSuccess={() => setCurrentView({ type: "task" })}
+          onCancel={() => deactivateWidget({ setWidgetState })}
+        />
       );
       showSidebar = false;
+      windowAppearance = {
+        toolbar: {
+          showMinimize: false,
+          showMaximize: false,
+          showClose: true,
+        },
+      };
       break;
   }
 
   return (
     <StewardWindow
+      appearance={windowAppearance}
       extraClasses={`${currentView.type}-view`}
       sidebar={
         showSidebar ? (
@@ -84,7 +102,7 @@ export function AdminWidget() {
           </aside>
         ) : null
       }
-      displayView={<main>{displayView}</main>}
+      focalView={<main>{focalView}</main>}
       windowSize={widgetState.windowSize}
       windowPosition={widgetState.windowPosition}
       onMinimize={() => updateWidgetState({ minimized: true }, setWidgetState)}
@@ -95,9 +113,9 @@ export function AdminWidget() {
         updateWidgetState({ windowPosition }, setWidgetState)
       }
       onClose={() => {
-        if (currentView.type === "logout") {
-          // If we're on the logout confirmation view, interpret closing
-          // the widget as confirming logout.
+        if (
+          currentView.type === "logout" ||
+          currentView.type === "login") {
           deactivateWidget({ setWidgetState });
         } else {
           setCurrentView({ type: "logout" });
@@ -148,7 +166,6 @@ function getStoredState() {
  * sessions until explicitly deactivated by user.
  */
 async function activateWidget({ setWidgetState, navigate }) {
-  localStorage.setItem("admin_open", "true");
   updateWidgetState({ activated: true }, setWidgetState);
   navigate("/", { replace: true });
 }
@@ -158,21 +175,6 @@ async function activateWidget({ setWidgetState, navigate }) {
  * overlay.
  */
 async function deactivateWidget({ setWidgetState }) {
-  /* don't await returned Promise */
-  void client.logout().catch((err) => {
-    console.error("Logout failed", err);
-  });
-
   updateWidgetState({ activated: false }, setWidgetState);
-  localStorage.setItem("admin_open", "false");
-}
-
-async function handleLogin({ email, password }) {
-  try {
-    await client.loginWithPassword(email, password);
-    updateWidgetState({ loggedIn: true }, setWidgetState);
-  } catch (err) {
-    console.error("Login failed", err);
-    throw err;
-  }
+  await client.logout();
 }

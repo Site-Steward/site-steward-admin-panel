@@ -23,37 +23,23 @@ export default function AuthView({
     case "loggingIn":
       header = "Welcome back...";
       body = (
-        <>
-          <VerifyCredentialsForm onVerified={onSuccess} />
-          <button
-            className="ui secondary"
-            onClick={() => setMode("requestingReset")}
-            type="button"
-          >
-            Set or reset password
-          </button>
-        </>
+          <VerifyCredentialsForm
+            onVerified={onSuccess} 
+            onResetPassword={() => setMode("requestingReset")}
+          />
       );
       break;
 
     case "requestingReset":
       header = "Email verification";
       body = (
-        <>
           <RequestResetForm
             onCodeSent={(email) => {
               setEmailForReset(email);
               setMode("settingPassword");
             }}
+            onCancel={() => setMode("loggingIn")}
           />
-          <button
-            className="ui secondary"
-            onClick={() => setMode("loggingIn")}
-            type="button"
-          >
-            Back to login
-          </button>
-        </>
       );
       break;
 

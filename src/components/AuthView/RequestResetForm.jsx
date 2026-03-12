@@ -1,6 +1,6 @@
 import ApiForm from "../ApiForm/ApiForm.jsx";
 
-export default function RequestResetForm({ onCodeSent }) {
+export default function RequestResetForm({ onCodeSent, onCancel }) {
   return (
     <ApiForm
       apiMethod="requestPasswordReset"
@@ -17,7 +17,18 @@ export default function RequestResetForm({ onCodeSent }) {
             required
           />
         </div>
-        <button className="ui" type="submit">Request reset code</button>
+        <div className="button-row">
+          <button className="ui" type="submit">
+            Request reset code
+          </button>
+          <button
+            className="ui secondary"
+            onClick={onCancel}
+            type="button"
+          >
+            Back to login
+          </button>
+        </div>
       </div>
     </ApiForm>
   );
