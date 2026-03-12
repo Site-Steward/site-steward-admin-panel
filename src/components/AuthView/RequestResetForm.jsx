@@ -1,10 +1,20 @@
 import ApiForm from "../ApiForm/ApiForm.jsx";
+import Alert from "../Alert/Alert.jsx";
+import { useState } from "react";
 
 export default function RequestResetForm({ onCodeSent, onCancel }) {
+  const [alertMessage, setAlertMessage] = useState(null);
+
   return (
     <ApiForm
       apiMethod="requestPasswordReset"
       onSuccess={(apiCall) => onCodeSent(apiCall.args.email)}
+      onError={(e) =>
+        setAlertMessage({
+          severity: "error",
+          details: e.userMessage || "Request reset failed",
+        })
+      }
     >
       <div>
         <div>
@@ -17,15 +27,15 @@ export default function RequestResetForm({ onCodeSent, onCancel }) {
             required
           />
         </div>
+        <Alert
+          details={alertMessage?.details}
+          severity={alertMessage?.severity}
+        />
         <div className="button-row">
           <button className="ui" type="submit">
             Request reset code
           </button>
-          <button
-            className="ui secondary"
-            onClick={onCancel}
-            type="button"
-          >
+          <button className="ui secondary" onClick={onCancel} type="button">
             Back to login
           </button>
         </div>

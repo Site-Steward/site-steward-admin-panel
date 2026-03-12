@@ -10,9 +10,9 @@ export default function VerifyCredentialsForm({ onVerified, onResetPassword }) {
     <ApiForm
       apiMethod="loginWithPassword"
       onSuccess={onVerified}
-      onError={() => setAlertMessage({
+      onError={(e) => setAlertMessage({
         severity: "error",
-        details: "Login failed"
+        details: e.userMessage || "Login failed"
       })}
     >
       <div>

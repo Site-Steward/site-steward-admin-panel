@@ -1,11 +1,21 @@
 import ApiForm from "../ApiForm/ApiForm.jsx";
+import Alert from "../Alert/Alert.jsx";
+import { useState } from "react";
 
 export default function SetPasswordForm({ email, onSetPassword }) {
+  const [alertMessage, setAlertMessage] = useState(null);
+
   return (
     <ApiForm
       apiMethod="setPassword"
       onSuccess={onSetPassword}
       extraArgs={{ email }}
+      onError={(e) =>
+        setAlertMessage({
+          severity: "error",
+          details: e.userMessage || "Set password failed",
+        })
+      }
     >
       <div>
         <div>
@@ -29,7 +39,13 @@ export default function SetPasswordForm({ email, onSetPassword }) {
             required
           />
         </div>
-        <button className="ui" type="submit">Set Password</button>
+        <Alert
+          details={alertMessage?.details}
+          severity={alertMessage?.severity}
+        />
+        <button className="ui" type="submit">
+          Set Password
+        </button>
       </div>
     </ApiForm>
   );
