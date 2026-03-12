@@ -26,7 +26,7 @@ export default function VerifyCredentialsForm({ onVerified }) {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button className="ui" type="submit">Login</button>
       </div>
     </ApiForm>
   );

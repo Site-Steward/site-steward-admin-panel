@@ -17,7 +17,7 @@ export default function RequestResetForm({ onCodeSent }) {
             required
           />
         </div>
-        <button type="submit">Request reset code</button>
+        <button className="ui" type="submit">Request reset code</button>
       </div>
     </ApiForm>
   );

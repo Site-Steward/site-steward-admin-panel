@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import client from "../util/siteStewardApiClient.js";
 
 import StewardWindow from "./StewardWindow/StewardWindow.jsx";
-import LoginView from "./LoginView/LoginView.jsx";
+import AuthView from "./AuthView/AuthView.jsx";
 import TaskView from "./TaskView/TaskView.jsx";
 import ToggleButton from "./ToggleButton/ToggleButton.jsx";
-import LogoutView from "./LogoutView/LogoutView.jsx";
 import AsideMenu from "./AsideMenu/AsideMenu.jsx";
 
 import "../global.css";
@@ -57,8 +56,9 @@ export function AdminWidget() {
 
     case "logout":
       displayView = (
-        <LogoutView
-          onConfirmed={() => deactivateWidget({ setWidgetState })}
+        <AuthView
+          isLogout={true}
+          onSuccess={() => deactivateWidget({ setWidgetState })}
           onCancel={() => setCurrentView({ type: "task" })}
         />
       );
@@ -68,7 +68,7 @@ export function AdminWidget() {
     case "login":
     default:
       displayView = (
-        <LoginView onSuccess={() => setCurrentView({ type: "task" })} />
+        <AuthView onSuccess={() => setCurrentView({ type: "task" })} />
       );
       showSidebar = false;
       break;

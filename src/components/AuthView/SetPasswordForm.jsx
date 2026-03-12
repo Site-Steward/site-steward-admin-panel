@@ -29,7 +29,7 @@ export default function SetPasswordForm({ email, onSetPassword }) {
             required
           />
         </div>
-        <button type="submit">Set Password</button>
+        <button className="ui" type="submit">Set Password</button>
       </div>
     </ApiForm>
   );

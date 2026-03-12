@@ -4,8 +4,57 @@
 
 :root {
   --bg-offwhite: #fefefe;
+
+  --button-fill-primary: #4b5563;
+  --button-fill-primary-hover: #374151;
+  --button-text-primary: #fff;
+  
+  --button-fill-secondary: #ffffff;
+  --button-fill-secondary-hover: #f3f4f6;
+  --button-text-secondary: #374151;
 }
 
 main {
   background: var(--bg-offwhite);
+}
+
+button.ui {
+  border: 1px solid var(--button-fill-primary);
+  border-radius: 8px;
+  background: var(--button-fill-primary);
+  color: var(--button-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background: var(--button-fill-primary-hover);
+    border-color: var(--button-fill-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.secondary {
+    border: 1px solid var(--button-text-secondary);
+    background: var(--button-fill-secondary);
+    color: var(--button-text-secondary);
+
+    &:hover {
+      background: var(--button-fill-secondary-hover);
+      border-color: var(--button-fill-secondary-hover);
+    }
+  }
 }
