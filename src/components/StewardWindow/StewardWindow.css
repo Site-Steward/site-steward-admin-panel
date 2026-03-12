@@ -70,12 +70,13 @@
     padding: 0 16px;
 
     /* decoration */
-    background-color: rgb(240, 240, 240);
-    border-bottom: 1px solid rgb(200, 200, 200);
+    background-color: var(--dark-blue);
+    border-bottom: 1px solid var(--dark-blue);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 
     h1 {
+      color: var(--titlebar-text);
       font-size: 16px;
       margin: 0;
     }
@@ -89,6 +90,7 @@
         height: 24px;
         border: none;
         background-color: transparent;
+        color: var(--titlebar-text);
         cursor: pointer;
         font-size: 16px;
         line-height: 1;

@@ -3,9 +3,13 @@
 }
 
 :root {
+  
+  --titlebar-text: white;
+  
   --bg-offwhite: #fefefe;
+  --dark-blue: rgb(75 85 99);
 
-  --button-fill-primary: #4b5563;
+  --button-fill-primary: var(--dark-blue);
   --button-fill-primary-hover: #374151;
   --button-text-primary: #fff;
   
