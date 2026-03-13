@@ -3,16 +3,15 @@
 }
 
 :root {
-  
   --titlebar-text: white;
-  
-  --bg-offwhite: #fefefe;
-  --dark-blue: rgb(75 85 99);
 
-  --button-fill-primary: var(--dark-blue);
+  --bg-offwhite: #fefefe;
+  --dark-purple: rgb(93 81 149);
+
+  --button-fill-primary: var(--dark-purple);
   --button-fill-primary-hover: #374151;
   --button-text-primary: #fff;
-  
+
   --button-fill-secondary: #ffffff;
   --button-fill-secondary-hover: #f3f4f6;
   --button-text-secondary: #374151;
