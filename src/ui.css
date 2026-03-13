@@ -1,13 +1,3 @@
-@import url("./colors.css");
-@import url("./ui.css");
-
-* {
-  box-sizing: border-box;
-}
-
-main {
-  background: var(--bg-offwhite);
-}
 
 button.ui {
   border: 1px solid var(--button-fill-primary);
