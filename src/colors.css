@@ -8,7 +8,7 @@
   --surface-default: #ffffff;
   --surface-muted: #f3f4f6;
   --surface-overlay: rgba(24, 24, 24, 0.3);
-  --surface-panel: rgb(246 246 246);
+  --surface-panel: #f9f9f9;
   --surface-panel-hover: rgb(232 232 232);
   --surface-panel-active: rgb(234 232 247);
 

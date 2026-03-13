@@ -3,14 +3,21 @@ name: write-react-components
 description: "Use when creating a new React UI component. Generates a folder for the component, keeping JSX and CSS in separate files.
 ---
 
-# React Component Pattern
+# Write React Components
 
-## Required Output
+## File structure
 
-For a new component `WidgetCard`, create:
+For a new component that whose use isn't limited to a specific parent component, create:
 
-- `src/components/WidgetCard/WidgetCard.jsx`
-- `src/components/WidgetCard/WidgetCard.css`
+- `src/components/Widget/Widget.jsx`
+- `src/components/Widget/Widget.css`
+
+If the component is only used within a specific parent component, create:
+
+- `src/components/ParentComponent/ChildComponent/ChildComponent.jsx`
+- `src/components/ParentComponent/ChildComponent/ChildComponent.css`
+
+Where logical extract functions into separate js files as needed, for exampl
 
 ## Templates
 
