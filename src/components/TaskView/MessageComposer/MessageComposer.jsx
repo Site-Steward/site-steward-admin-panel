@@ -1,7 +1,7 @@
 import { ArrowUp, LoaderCircle, Plus, X } from "lucide-react";
 import { useRef, useState } from "react";
 
-import api from "../../util/siteStewardApiClient.js";
+import api from "../../../util/siteStewardApiClient.js";
 import { uploadSelectedFiles } from "./attachmentUpload.js";
 
 import "./MessageComposer.css";

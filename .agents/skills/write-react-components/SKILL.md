@@ -17,7 +17,6 @@ If the component is only used within a specific parent component, create:
 - `src/components/ParentComponent/ChildComponent/ChildComponent.jsx`
 - `src/components/ParentComponent/ChildComponent/ChildComponent.css`
 
-Where logical extract functions into separate js files as needed, for exampl
 
 ## Templates
 
@@ -51,13 +50,3 @@ export default function WidgetCard({ title, children }) {
   }
 }
 ```
-
-## Checklist
-
-- Created component folder in `src/components/<ComponentName>/`.
-- Added both `*.jsx` and `*.css` files.
-- Imported CSS from the component file.
-- Used nested CSS under a root class.
-- Updated parent imports and JSX usage.
-- Removed stale duplicated styles from old location.
-- Verified there are no diagnostics in changed files.
