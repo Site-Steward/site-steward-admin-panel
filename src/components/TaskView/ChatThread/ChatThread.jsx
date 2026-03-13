@@ -28,7 +28,9 @@ export default function ChatThread({ taskId }) {
         setTask(nextTask);
         setError(null);
 
-        const prompts = Array.isArray(nextTask?.prompts) ? nextTask.prompts : [];
+        const prompts = Array.isArray(nextTask?.prompts)
+          ? nextTask.prompts
+          : [];
         const lastPrompt = prompts.at(-1);
         const isWaitingForResponse =
           lastPrompt?.state === "pending" && !lastPrompt?.response;
@@ -89,7 +91,10 @@ export default function ChatThread({ taskId }) {
           </article>
 
           {prompt.response ? (
-            <article className="message message-agent" aria-label="Agent response">
+            <article
+              className="message message-agent"
+              aria-label="Agent response"
+            >
               <p>{prompt.response}</p>
             </article>
           ) : null}
