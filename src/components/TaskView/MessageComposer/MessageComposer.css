@@ -137,7 +137,9 @@
         opacity: 0;
         transform: translateY(4px);
         pointer-events: none;
-        transition: opacity 140ms ease, transform 140ms ease;
+        transition:
+          opacity 140ms ease,
+          transform 140ms ease;
         white-space: nowrap;
         z-index: 2;
       }
@@ -155,6 +157,11 @@
       border-radius: 999px;
       background: var(--border-strong);
       color: var(--surface-default);
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
     }
   }
 

@@ -6,8 +6,10 @@ import { uploadSelectedFiles } from "./attachmentUpload.js";
 
 import "./MessageComposer.css";
 
-export default function MessageComposer() {
+export default function MessageComposer({ taskId, onTaskCreated }) {
   const [attachments, setAttachments] = useState([]);
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef(null);
 
   const openFilePicker = () => {
@@ -72,8 +74,34 @@ export default function MessageComposer() {
     event.target.value = "";
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const initialPrompt = message.trim();
+    if (!initialPrompt || isSubmitting) {
+      return;
+    }
+
+    if (!taskId) {
+      setIsSubmitting(true);
+      try {
+        const createdTask = await api.createTask(initialPrompt);
+        if (createdTask?.id !== undefined && createdTask?.id !== null) {
+          onTaskCreated?.(String(createdTask.id));
+        }
+        setMessage("");
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
   return (
-    <form className="message-composer" aria-label="Message composer">
+    <form
+      className="message-composer"
+      aria-label="Message composer"
+      onSubmit={handleSubmit}
+    >
       <label className="sr-only" htmlFor="task-input">
         Send a message
       </label>
@@ -82,6 +110,8 @@ export default function MessageComposer() {
         name="message"
         placeholder="Send a message..."
         rows={2}
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
       />
 
       {attachments.length > 0 ? (
@@ -150,7 +180,12 @@ export default function MessageComposer() {
         >
           <Plus size={20} strokeWidth={2} />
         </button>
-        <button type="submit" className="send-button" aria-label="Send">
+        <button
+          type="submit"
+          className="send-button"
+          aria-label="Send"
+          disabled={!message.trim() || isSubmitting}
+        >
           <ArrowUp size={18} strokeWidth={2.3} />
         </button>
       </div>
