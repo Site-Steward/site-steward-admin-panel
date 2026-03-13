@@ -1,3 +1,3 @@
 # Agent instructions
 
-- examine skills in `.agents/skills` found in project root 
+- skills located in `.agents/skills` found in project root 

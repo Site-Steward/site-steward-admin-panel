@@ -1,5 +1,5 @@
 ---
-name: react-component-pattern
+name: write-react-components
 description: "Use when creating a new React UI component. Generates a folder for the component, keeping JSX and CSS in separate files.
 ---
 

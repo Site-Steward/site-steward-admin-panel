@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import "./styles/app.css";
-import { AdminWidget } from "../components/AdminWidget";
+import { AdminWidget } from "../AdminWidget";
 
 export default function App() {
   return (

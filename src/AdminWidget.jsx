@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import client from "../util/siteStewardApiClient.js";
+import client from "./util/siteStewardApiClient.js";
 
-import StewardWindow from "./StewardWindow/StewardWindow.jsx";
-import AuthView from "./AuthView/AuthView.jsx";
-import TaskView from "./TaskView/TaskView.jsx";
-import HistoryView from "./HistoryView/HistoryView.jsx";
-import ToolsView from "./ToolsView/ToolsView.jsx";
-import SettingsView from "./SettingsView/SettingsView.jsx";
-import ToggleButton from "./ToggleButton/ToggleButton.jsx";
-import ActivityBar from "./ActivityBar/ActivityBar.jsx";
+import StewardWindow from "./components/StewardWindow/StewardWindow.jsx";
+import AuthView from "./components/AuthView/AuthView.jsx";
+import TaskView from "./components/TaskView/TaskView.jsx";
+import HistoryView from "./components/HistoryView/HistoryView.jsx";
+import ToolsView from "./components/ToolsView/ToolsView.jsx";
+import SettingsView from "./components/SettingsView/SettingsView.jsx";
+import ToggleButton from "./components/ToggleButton/ToggleButton.jsx";
+import ActivityBar from "./components/ActivityBar/ActivityBar.jsx";
 
-import "../global.css";
-import "./AdminWidget.css";
+import "./global.css";
 
 const DEFAULT_WINDOW_SIZE = Object.freeze({
   width: 800,
@@ -28,7 +27,9 @@ export function AdminWidget() {
   const location = useLocation();
   const navigate = useNavigate();
   const [widgetState, setWidgetState] = useState(() => getStoredState());
-  const [currentView, setCurrentView] = useState({ type: "login" });
+  const [currentView, setCurrentView] = useState({
+    type: widgetState.isLoggedIn ? "task" : "login",
+  });
 
   // Activate on when /admin route detected; the consumer must make this
   // route navigable, typically as an alternate path to home "/"
@@ -50,7 +51,9 @@ export function AdminWidget() {
     );
   }
 
-  let focalView, showActivityBar, windowAppearance = {};
+  let focalView,
+    showActivityBar,
+    windowAppearance = {};
   switch (currentView.type) {
     case "task":
       focalView = <TaskView taskId={currentView.taskId} />;
@@ -94,7 +97,10 @@ export function AdminWidget() {
     default:
       focalView = (
         <AuthView
-          onSuccess={() => setCurrentView({ type: "task" })}
+          onSuccess={() => {
+            updateWidgetState({ isLoggedIn: true }, setWidgetState);
+            setCurrentView({ type: "task" });
+          }}
           onCancel={() => deactivateWidget({ setWidgetState })}
         />
       );
@@ -134,9 +140,7 @@ export function AdminWidget() {
         updateWidgetState({ windowPosition }, setWidgetState)
       }
       onClose={() => {
-        if (
-          currentView.type === "logout" ||
-          currentView.type === "login") {
+        if (currentView.type === "logout" || currentView.type === "login") {
           deactivateWidget({ setWidgetState });
         } else {
           setCurrentView({ type: "logout" });
@@ -161,8 +165,6 @@ function getStoredState() {
     return {
       activated: false,
       minimized: false,
-      windowSize: { ...DEFAULT_WINDOW_SIZE },
-      windowPosition: { ...DEFAULT_WINDOW_POSITION },
       ...parsed,
       windowSize: {
         ...DEFAULT_WINDOW_SIZE,
@@ -196,6 +198,6 @@ async function activateWidget({ setWidgetState, navigate }) {
  * overlay.
  */
 async function deactivateWidget({ setWidgetState }) {
-  updateWidgetState({ activated: false }, setWidgetState);
+  updateWidgetState({ activated: false, isLoggedIn: false }, setWidgetState);
   await client.logout();
 }

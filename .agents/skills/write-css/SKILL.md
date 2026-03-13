@@ -1,10 +1,7 @@
 ---
-name: writing-css
+name: write-css
 description: Rules for writing CSS.
 ---
-
-# Writing CSS
-
 
 ## Use nesting
 

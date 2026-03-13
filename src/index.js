@@ -1,1 +1,1 @@
-export { AdminWidget } from "./components/AdminWidget.jsx";
+export { AdminWidget } from "./AdminWidget.jsx";
