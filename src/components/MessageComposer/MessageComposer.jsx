@@ -2,6 +2,7 @@ import { ArrowUp, LoaderCircle, Plus, X } from "lucide-react";
 import { useRef, useState } from "react";
 
 import api from "../../util/siteStewardApiClient.js";
+import { uploadSelectedFiles } from "./attachmentUpload.js";
 
 import "./MessageComposer.css";
 
@@ -14,51 +15,33 @@ export default function MessageComposer() {
   };
 
   const removeAttachment = (localId) => {
-    setAttachments((current) => current.filter((attachment) => attachment.localId !== localId));
+    setAttachments((current) =>
+      current.filter((attachment) => attachment.localId !== localId),
+    );
   };
 
   const handleFileSelection = async (event) => {
     const selectedFiles = Array.from(event.target.files ?? []);
 
-    for (const file of selectedFiles) {
-      const localId = crypto.randomUUID();
-
-      setAttachments((current) => [
-        ...current,
-        {
-          localId,
-          filename: file.name,
-          progress: 0,
-          status: "uploading",
-        },
-      ]);
-
-      try {
-        const { asset_id: assetId, signed_put_url: signedPutUrl } = await api.createAsset({
-          filename: file.name,
-          mime: file.type || "application/octet-stream",
-          size: file.size,
-        });
-
-        await uploadFileWithProgress({
-          file,
-          signedPutUrl,
-          onProgress: (progress) => {
-            setAttachments((current) =>
-              current.map((attachment) =>
-                attachment.localId === localId
-                  ? {
-                      ...attachment,
-                      progress,
-                    }
-                  : attachment,
-              ),
-            );
-          },
-        });
-
-        await api.completeAsset(assetId);
-
+    await uploadSelectedFiles({
+      files: selectedFiles,
+      api,
+      onAttachmentQueued: (attachment) => {
+        setAttachments((current) => [...current, attachment]);
+      },
+      onProgress: (localId, progress) => {
+        setAttachments((current) =>
+          current.map((attachment) =>
+            attachment.localId === localId
+              ? {
+                  ...attachment,
+                  progress,
+                }
+              : attachment,
+          ),
+        );
+      },
+      onUploaded: (localId, assetId) => {
         setAttachments((current) =>
           current.map((attachment) =>
             attachment.localId === localId
@@ -71,7 +54,8 @@ export default function MessageComposer() {
               : attachment,
           ),
         );
-      } catch {
+      },
+      onError: (localId) => {
         setAttachments((current) =>
           current.map((attachment) =>
             attachment.localId === localId
@@ -82,8 +66,8 @@ export default function MessageComposer() {
               : attachment,
           ),
         );
-      }
-    }
+      },
+    });
 
     event.target.value = "";
   };
@@ -117,14 +101,19 @@ export default function MessageComposer() {
                       aria-hidden="true"
                     />
                   ) : (
-                    <span className="attachment-status-dot" aria-hidden="true" />
+                    <span
+                      className="attachment-status-dot"
+                      aria-hidden="true"
+                    />
                   )}
                   <span className="attachment-name">{attachment.filename}</span>
                 </div>
 
                 <div className="attachment-meta">
                   {isUploading ? (
-                    <span className="attachment-progress">{attachment.progress}%</span>
+                    <span className="attachment-progress">
+                      {attachment.progress}%
+                    </span>
                   ) : null}
                   {hasError ? (
                     <span className="attachment-error">Upload failed</span>
@@ -167,40 +156,4 @@ export default function MessageComposer() {
       </div>
     </form>
   );
-}
-
-function uploadFileWithProgress({ file, signedPutUrl, onProgress }) {
-  return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest();
-
-    request.upload.addEventListener("progress", (event) => {
-      if (!event.lengthComputable) {
-        return;
-      }
-
-      const percentComplete = Math.round((event.loaded / event.total) * 100);
-      onProgress(percentComplete);
-    });
-
-    request.addEventListener("load", () => {
-      if (request.status >= 200 && request.status < 300) {
-        resolve();
-        return;
-      }
-
-      reject(new Error(`Upload failed with status ${request.status}`));
-    });
-
-    request.addEventListener("error", () => {
-      reject(new Error("Upload failed"));
-    });
-
-    request.open("PUT", signedPutUrl);
-
-    if (file.type) {
-      request.setRequestHeader("Content-Type", file.type);
-    }
-
-    request.send(file);
-  });
 }
