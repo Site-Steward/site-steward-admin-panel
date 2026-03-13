@@ -1,10 +1,15 @@
-import { ArrowUp, Copy, Ellipsis, Plus, RefreshCw } from "lucide-react";
+import { Copy, Ellipsis, RefreshCw } from "lucide-react";
+import MessageComposer from "../MessageComposer/MessageComposer.jsx";
 
 import "./TaskView.css";
 
 export default function TaskView({ taskId }) {
   return (
-    <section className="task-view" aria-label="Task conversation" data-task-id={taskId}>
+    <section
+      className="task-view"
+      aria-label="Task conversation"
+      data-task-id={taskId}
+    >
       <div className="task-thread" role="log" aria-live="polite">
         <article className="message message-user" aria-label="User message">
           <p>Test message</p>
@@ -34,26 +39,7 @@ export default function TaskView({ taskId }) {
         </article>
       </div>
 
-      <form className="composer" aria-label="Message composer">
-        <label className="sr-only" htmlFor="task-input">
-          Send a message
-        </label>
-        <textarea
-          id="task-input"
-          name="message"
-          placeholder="Send a message..."
-          rows={2}
-        />
-
-        <div className="composer-controls">
-          <button type="button" className="attach-button" aria-label="Attach">
-            <Plus size={20} strokeWidth={2} />
-          </button>
-          <button type="submit" className="send-button" aria-label="Send">
-            <ArrowUp size={18} strokeWidth={2.3} />
-          </button>
-        </div>
-      </form>
+      <MessageComposer />
     </section>
   );
 }
