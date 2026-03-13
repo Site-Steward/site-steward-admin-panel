@@ -1,7 +1,7 @@
 .activity-bar {
   height: 100%;
-  background: rgb(246, 246, 246);
-  border-right: 1px solid rgb(214, 214, 214);
+  background: var(--surface-panel);
+  border-right: 1px solid var(--border-panel);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -22,22 +22,24 @@
   border: none;
   border-left: 2px solid transparent;
   background: transparent;
-  color: rgb(72, 72, 72);
+  color: var(--text-panel);
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 120ms ease, color 120ms ease,
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
     border-left-color 120ms ease;
 }
 
 .activity-bar-item:hover {
-  background: rgb(232, 232, 232);
-  color: rgb(43 23 134);
+  background: var(--surface-panel-hover);
+  color: var(--text-accent);
 }
 
 .activity-bar-item.is-active {
-  border-left-color: rgb(43 23 134);
-  background: rgb(234, 232, 247);
-  color: rgb(43 23 134);
+  border-left-color: var(--text-accent);
+  background: var(--surface-panel-active);
+  color: var(--text-accent);
 }

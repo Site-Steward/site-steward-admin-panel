@@ -1,6 +1,6 @@
 .message-composer {
   margin-top: auto;
-  border: 1px solid #9ca3af;
+  border: 1px solid var(--border-strong);
   border-radius: 18px;
   padding: 14px 14px 10px;
   display: flex;
@@ -13,11 +13,11 @@
     resize: none;
     width: 100%;
     font: inherit;
-    color: #111827;
+    color: var(--text-primary);
     min-height: 44px;
 
     &::placeholder {
-      color: #6b7280;
+      color: var(--text-muted);
     }
 
     &:focus {
@@ -33,7 +33,7 @@
     button {
       border: none;
       background: transparent;
-      color: #4b5563;
+      color: var(--text-subtle);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -44,8 +44,8 @@
       width: 32px;
       height: 32px;
       border-radius: 999px;
-      background: #9ca3af;
-      color: #fff;
+      background: var(--border-strong);
+      color: var(--surface-default);
     }
   }
 

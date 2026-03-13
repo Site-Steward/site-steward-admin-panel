@@ -1,15 +1,49 @@
 
 :root {
-  --titlebar-text: white;
+  --titlebar-text: #ffffff;
 
   --bg-offwhite: #fefefe;
   --dark-purple: rgb(93 81 149);
 
-  --button-fill-primary: var(--dark-purple);
-  --button-fill-primary-hover: #374151;
-  --button-text-primary: #fff;
+  --surface-default: #ffffff;
+  --surface-muted: #f3f4f6;
+  --surface-overlay: rgba(24, 24, 24, 0.3);
+  --surface-panel: rgb(246 246 246);
+  --surface-panel-hover: rgb(232 232 232);
+  --surface-panel-active: rgb(234 232 247);
 
-  --button-fill-secondary: #ffffff;
-  --button-fill-secondary-hover: #f3f4f6;
-  --button-text-secondary: #374151;
+  --text-primary: #111827;
+  --text-secondary: #1f2937;
+  --text-label: #374151;
+  --text-muted: #6b7280;
+  --text-subtle: #4b5563;
+  --text-disabled: #9ca3af;
+  --text-panel: rgb(72, 72, 72);
+  --text-accent: rgb(43 23 134);
+
+  --border-default: #d1d5db;
+  --border-strong: #9ca3af;
+  --border-panel: rgb(214, 214, 214);
+
+  --focus-ring: rgba(156, 163, 175, 0.3);
+  --focus-ring-soft: rgba(156, 163, 175, 0.25);
+
+  --shadow-window: 0 18px 38px rgba(0, 0, 0, 0.28);
+
+  --alert-success-bg: #d4edda;
+  --alert-success-text: #155724;
+  --alert-error-bg: #f8d7da;
+  --alert-error-text: #721c24;
+  --alert-warning-bg: #fff3cd;
+  --alert-warning-text: #856404;
+  --alert-info-bg: #d1ecf1;
+  --alert-info-text: #0c5460;
+
+  --button-fill-primary: var(--dark-purple);
+  --button-fill-primary-hover: var(--text-label);
+  --button-text-primary: var(--surface-default);
+
+  --button-fill-secondary: var(--surface-default);
+  --button-fill-secondary-hover: var(--surface-muted);
+  --button-text-secondary: var(--text-label);
 }

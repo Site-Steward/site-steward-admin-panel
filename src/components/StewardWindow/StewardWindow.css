@@ -4,7 +4,7 @@
   z-index: 999999999;
   pointer-events: none;
   backdrop-filter: blur(1px);
-  background: rgba(24, 24, 24, 0.3);
+  background: var(--surface-overlay);
 }
 
 .steward-window {
@@ -35,9 +35,9 @@
   }
 
   /* decoration */
-  background-color: rgb(255, 255, 255);
+  background-color: var(--surface-default);
   border-radius: 8px;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-window);
 
   aside {
     grid-area: activitybar;

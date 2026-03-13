@@ -7,22 +7,22 @@
   align-items: center;
 
   &.success {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: var(--alert-success-bg);
+    color: var(--alert-success-text);
   }
 
   &.error {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: var(--alert-error-bg);
+    color: var(--alert-error-text);
   }
 
   &.warning {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: var(--alert-warning-bg);
+    color: var(--alert-warning-text);
   }
 
   &.info {
-    background-color: #d1ecf1;
-    color: #0c5460;
+    background-color: var(--alert-info-bg);
+    color: var(--alert-info-text);
   }
 }

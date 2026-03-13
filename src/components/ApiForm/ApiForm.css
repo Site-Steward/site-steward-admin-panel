@@ -15,7 +15,7 @@
   margin-bottom: 6px;
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-label);
 }
 
 .api-form input,
@@ -23,10 +23,10 @@
 .api-form select {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-default);
   border-radius: 8px;
-  background: #fff;
-  color: #111827;
+  background: var(--surface-default);
+  color: var(--text-primary);
   font-size: 14px;
   line-height: 1.4;
   transition:
@@ -37,15 +37,15 @@
 
 .api-form input::placeholder,
 .api-form textarea::placeholder {
-  color: #9ca3af;
+  color: var(--text-disabled);
 }
 
 .api-form input:focus,
 .api-form textarea:focus,
 .api-form select:focus {
   outline: none;
-  border-color: #9ca3af;
-  box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.25);
+  border-color: var(--border-strong);
+  box-shadow: 0 0 0 3px var(--focus-ring-soft);
 }
 
 .api-form button[type="submit"] {
