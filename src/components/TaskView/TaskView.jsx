@@ -18,7 +18,13 @@ export default function TaskView({ taskId }) {
       aria-label="Task conversation"
       data-task-id={activeTaskId}
     >
-      <ChatThread taskId={activeTaskId} />
+      {activeTaskId ? 
+        <ChatThread taskId={activeTaskId} /> :
+        <div className="welcome-message">
+          <h2>Hello</h2>
+          <p>How can I help you today?</p>
+        </div>
+      }
 
       <MessageComposer
         taskId={activeTaskId}
