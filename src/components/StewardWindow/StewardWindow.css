@@ -10,6 +10,13 @@
 .steward-window {
   --titlebar-height: 40px;
   --resize-hit-size: 12px;
+  --activitybar-width: 56px;
+  --icon-width: 34px;
+
+   /* center icon on activitybar */
+  --titlebar-inline-padding: calc(
+      (var(--activitybar-width) - var(--icon-width)) / 2
+    );
 
   /* external layout */
   z-index: 1000000000;
@@ -27,7 +34,7 @@
     grid-template:
       "titlebar  titlebar" auto
       "activitybar content" 1fr
-      / 56px minmax(0, 1fr);
+      / var(--activitybar-width) minmax(0, 1fr);
   }
   &:not(:has(aside)) {
     display: flex;
@@ -64,7 +71,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 var(--titlebar-inline-padding);
 
     /* decoration */
     background-color: var(--dark-purple);
@@ -76,6 +83,18 @@
       color: var(--titlebar-text);
       font-size: 16px;
       margin: 0;
+    }
+
+    .titlebar-start {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .titlebar-icon {
+      width: var(--icon-width);
+      margin-right: var(--titlebar-inline-padding);
     }
 
     .controls {

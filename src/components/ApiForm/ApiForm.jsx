@@ -10,11 +10,11 @@ export default function ApiForm({
 }) {
   const submit = async (formData) => {
     const args = { ...Object.fromEntries(formData), ...extraArgs };
-
+    const callData = { apiMethod, args };
     try {
-      const result = await client[apiMethod](args);
+      callData.result = await client[apiMethod](args);
       if (onSuccess) {
-        onSuccess(result);
+        onSuccess(callData);
       }
     } catch (error) {
       onError?.(error);

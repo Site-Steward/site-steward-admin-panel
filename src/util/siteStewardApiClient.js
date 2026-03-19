@@ -1,11 +1,5 @@
-
-
 class SiteStewardApiClient {
-  constructor({
-    baseUrl,
-    defaultHeaders = {},
-    credentials = "include",
-  }) {
+  constructor({ baseUrl, defaultHeaders = {}, credentials = "include" }) {
     if (!baseUrl || typeof baseUrl !== "string") {
       throw new TypeError("SiteStewardApiClient requires a string baseUrl");
     }
@@ -77,7 +71,6 @@ class SiteStewardApiClient {
     return this.request("/health");
   }
 
-
   // AUTH
 
   requestPasswordReset(args) {
@@ -111,7 +104,6 @@ class SiteStewardApiClient {
     return this.request("/v1/me");
   }
 
-
   // TASK
 
   createTask(initialPrompt) {
@@ -127,6 +119,13 @@ class SiteStewardApiClient {
 
   getTask(taskId) {
     return this.request(`/v1/tasks/${encodeURIComponent(taskId)}`);
+  }
+
+  /*
+   * Returns 404 if no active tasks.
+   */
+  getActiveTask() {
+    return this.request("/v1/active-task");
   }
 
   getTaskPrompt(taskId, promptNumber) {
@@ -148,7 +147,6 @@ class SiteStewardApiClient {
     });
   }
 
-  
   // ASSET
 
   createAsset({ filename, mime, size, sha256 }) {
@@ -181,7 +179,6 @@ class SiteStewardApiClient {
 export { SiteStewardApiError };
 
 class SiteStewardApiError extends Error {
-
   constructor(message, { status, statusText, body, method, path } = {}) {
     super(message);
     this.name = "SiteStewardApiError";
@@ -198,9 +195,11 @@ function trimTrailingSlash(value) {
 }
 
 function isJsonContentType(contentType) {
-  return typeof contentType === "string" && contentType.includes("application/json");
+  return (
+    typeof contentType === "string" && contentType.includes("application/json")
+  );
 }
 
 export default new SiteStewardApiClient({
-  baseUrl: import.meta.env.VITE_SITE_STEWARD_API_BASE_URL
+  baseUrl: import.meta.env.VITE_SITE_STEWARD_API_BASE_URL,
 });

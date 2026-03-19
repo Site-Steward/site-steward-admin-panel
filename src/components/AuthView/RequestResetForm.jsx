@@ -8,7 +8,7 @@ export default function RequestResetForm({ onCodeSent, onCancel }) {
   return (
     <ApiForm
       apiMethod="requestPasswordReset"
-      onSuccess={(apiCall) => onCodeSent(apiCall.args.email)}
+      onSuccess={(callData) => onCodeSent(callData.args.email)}
       onError={(e) =>
         setAlertMessage({
           severity: "error",

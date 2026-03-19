@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Minus, Fullscreen, X } from "lucide-react";
 import "./StewardWindow.css";
+import headIcon from "../../assets/head_40x27.png";
 
 const DEFAULT_WINDOW_SIZE = Object.freeze({
   width: 800,
@@ -355,7 +356,10 @@ export default function StewardWindow({
           />
         ))}
         <div className="titlebar" onPointerDown={handleDragStart}>
-          <h1>Admin Panel</h1>
+          <div className="titlebar-start">
+            <img src={headIcon} alt="Steward" className="titlebar-icon" />
+            <h1>Admin Panel</h1>
+          </div>
           <div className="controls">
             {appearance.toolbar.showMinimize && (
               <button className="minimize" onClick={onMinimize}>

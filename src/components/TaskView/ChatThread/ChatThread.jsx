@@ -1,30 +1,22 @@
-import { useTimeline } from "./timeline";
+import { useTimeline } from "../useTimeline";
 import "./ChatThread.css";
 
-export default function ChatThread({ taskId }) {
-  
-  const timeline = useTimeline({
-    taskId,
-    onError: (error) => console.error(error)
-  });
+export default function ChatThread({ timeline }) {
 
-  return ( timeline ?
+  return timeline ? (
     <div className="chat-thread" role="log" aria-live="polite">
-      {timeline.messages.map((message, index) => {
+      {timeline.map((message, index) => {
         switch (message.type) {
-
           case "user-request":
             return (
               <div key={index} className="message user-request">
-                <div className="message-label">You</div>
-                <div className="message-content">{message.request}</div>
+                  {message.request}
               </div>
             );
 
           case "agent-response":
             return (
               <div key={index} className="message agent-response">
-                <div className="message-label">Steward</div>
                 <div className="message-content">{message.response}</div>
               </div>
             );
@@ -32,23 +24,20 @@ export default function ChatThread({ taskId }) {
           case "agent-working":
             return (
               <div key={index} className="message agent-working">
-                <div className="message-label">Steward</div>
                 {renderPromptStatus(message.prompt)}
               </div>
             );
-          
+
           case "building-preview":
             return (
               <div key={index} className="message building-preview">
-                <div className="message-label">Steward</div>
                 <p>Response ready. Building change preview now.</p>
               </div>
             );
-          
+
           case "preview-ready":
             return (
               <div key={index} className="message preview-ready">
-                <div className="message-label">Steward</div>
                 <p>
                   Preview is ready.{" "}
                   <a href={message.previewUrl} target="_blank" rel="noreferrer">
@@ -68,10 +57,8 @@ export default function ChatThread({ taskId }) {
         }
       })}
     </div>
-    :
-    <div className="chat-thread no-task">
-      Loading...
-    </div>
+  ) : (
+    <div className="chat-thread no-task">Loading...</div>
   );
 }
 

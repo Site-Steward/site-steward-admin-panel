@@ -1,12 +1,12 @@
 import { ArrowUp, LoaderCircle, Plus, X } from "lucide-react";
 import { useRef, useState } from "react";
 
-import api from "../../../util/siteStewardApiClient.js";
+import api from "@/util/siteStewardApiClient.js";
 import { uploadSelectedFiles } from "./attachmentUpload.js";
 
 import "./MessageComposer.css";
 
-export default function MessageComposer({ taskId, onTaskCreated }) {
+export default function MessageComposer({ task, onSubmit }) {
   const [attachments, setAttachments] = useState([]);
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,17 +82,13 @@ export default function MessageComposer({ taskId, onTaskCreated }) {
       return;
     }
 
-    if (!taskId) {
-      setIsSubmitting(true);
-      try {
-        const createdTask = await api.createTask(initialPrompt);
-        if (createdTask?.id !== undefined && createdTask?.id !== null) {
-          onTaskCreated?.(String(createdTask.id));
-        }
-        setMessage("");
-      } finally {
-        setIsSubmitting(false);
-      }
+    setIsSubmitting(true);
+
+    try {
+      await onSubmit(initialPrompt);
+      setMessage("");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

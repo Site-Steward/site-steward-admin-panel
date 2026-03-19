@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import client from "./util/siteStewardApiClient.js";
+import client from "@/util/siteStewardApiClient.js";
 
 import StewardWindow from "./components/StewardWindow/StewardWindow.jsx";
 import AuthView from "./components/AuthView/AuthView.jsx";

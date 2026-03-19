@@ -1,23 +1,34 @@
 import { useEffect } from "react";
-import api from "../../../util/siteStewardApiClient.js";
+import api from "@/util/siteStewardApiClient.js";
 
-const POLLING_INTERVAL_MS = 1000; // 1 second
+const POLLING_INTERVAL_MS = 12000;
 
-export function useTaskRefreshLoop({ taskId, onRefresh, onError }) {
+/**
+ * Custom React hook to manage a polling loop for refreshing a
+ * task's data.
+ */
+export function useTaskRefreshLoop({ task, onRefresh, onError }) {
+  const taskId = task?.id;
+
   useEffect(() => {
+    if (!taskId) {
+      return;
+    }
+
     let isCancelled = false;
     let timeoutId;
 
     const loadTask = async () => {
-      if (!taskId) {
-        return;
-      }
-
       try {
         const refreshedTask = await api.getTask(taskId);
         if (isCancelled) {
           return;
         }
+
+        const prompts = Array.isArray(refreshedTask?.prompts)
+          ? refreshedTask.prompts
+          : [];
+        const lastPrompt = prompts[prompts.length - 1];
 
         onRefresh(refreshedTask);
 
@@ -43,6 +54,9 @@ export function useTaskRefreshLoop({ taskId, onRefresh, onError }) {
 }
 
 function shouldContinuePolling(lastPrompt) {
+
+  return true;
+
   if (!lastPrompt) {
     return false;
   }

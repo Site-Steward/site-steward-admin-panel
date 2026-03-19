@@ -8,5 +8,11 @@ export default defineConfig({
   root: path.resolve(projectRoot, "src/demo-site"),
   envDir: projectRoot,
   publicDir: path.resolve(projectRoot, "public"),
-  plugins: [react()]
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "~": projectRoot,
+      "@": path.resolve(projectRoot, "src")
+    }
+  }
 });
