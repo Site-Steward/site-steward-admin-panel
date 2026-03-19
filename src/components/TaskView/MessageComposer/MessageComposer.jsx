@@ -94,7 +94,7 @@ export default function MessageComposer({ task, onSubmit }) {
 
   return (
     <form
-      className="message-composer"
+      className="message-composer card"
       aria-label="Message composer"
       onSubmit={handleSubmit}
     >

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import api from "@/util/siteStewardApiClient.js";
 import ChatThread from "./ChatThread/ChatThread.jsx";
 import MessageComposer from "./MessageComposer/MessageComposer.jsx";
+import ChangeDialog from "./ChangeDialog/ChangeDialog.jsx";
 import { useTaskRefreshLoop } from "./useTaskRefreshLoop.js";
 import { useTimeline } from "./useTimeline.js";
 
@@ -15,6 +16,7 @@ export default function TaskView({ taskId }) {
   const [task, setTask] = useState(null);
   const [pendingClientMessage, setPendingClientMessage] = useState(null);
   const timeline = useTimeline({ task, pendingClientMessage });
+  const previewReady = timeline?.at(-1)?.type === "preview-ready";
 
   console.log("timeline", timeline);
 
@@ -57,26 +59,37 @@ export default function TaskView({ taskId }) {
       aria-label="Task conversation"
       data-task-id={task?.id}
     >
-      {timeline ? (
-        <ChatThread timeline={timeline} />
+      <div className="task-view-thread-region">
+        {timeline ? (
+          <ChatThread timeline={timeline} />
+        ) : (
+          <div className="welcome-message">
+            <h2>Hello</h2>
+            <p>How can I help you today?</p>
+          </div>
+        )}
+      </div>
+
+      {previewReady ? (
+        <ChangeDialog
+          task={task}
+          onAccept={() => {}}
+          onOpenPreview={() => {}}
+        />
       ) : (
-        <div className="welcome-message">
-          <h2>Hello</h2>
-          <p>How can I help you today?</p>
-        </div>
+        <MessageComposer
+          task={task}
+          onSubmit={async (message) => {
+            setPendingClientMessage(message);
+            try {
+              await api.replyToTask(task.id, message);
+            } finally {
+              setPendingClientMessage(null);
+            }
+          }}
+        />
       )}
 
-      <MessageComposer
-        task={task}
-        onSubmit={async (message) => {
-          setPendingClientMessage(message);
-          try {
-            await api.replyToTask(task.id, message);
-          } finally {
-            setPendingClientMessage(null);
-          }
-        }}
-      />
     </section>
   );
 }

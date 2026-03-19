@@ -1,0 +1,9 @@
+.change-dialog {
+  display: block;
+  h2 {
+    width: 100%
+  }
+  href, button {
+    width: fit-content;
+  }
+}
