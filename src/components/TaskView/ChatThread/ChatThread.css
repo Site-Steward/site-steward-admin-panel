@@ -4,8 +4,8 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-bottom: 14px;
+  gap: var(--md-gap);
+  padding-bottom: var(--md-gap);
 
   .message {
     

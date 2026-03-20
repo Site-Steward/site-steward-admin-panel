@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import api from "@/util/siteStewardApiClient.js";
 import ChatThread from "./ChatThread/ChatThread.jsx";
 import MessageComposer from "./MessageComposer/MessageComposer.jsx";
-import ChangeDialog from "./ChangeDialog/ChangeDialog.jsx";
 import { useTaskRefreshLoop } from "./useTaskRefreshLoop.js";
 import { useTimeline } from "./useTimeline.js";
 
@@ -15,6 +14,7 @@ export default function TaskView({ taskId }) {
   const [error, setError] = useState(null);
   const [task, setTask] = useState(null);
   const [pendingClientMessage, setPendingClientMessage] = useState(null);
+  const [isAccepting, setIsAccepting] = useState(false);
   const timeline = useTimeline({ task, pendingClientMessage });
   const previewReady = timeline?.at(-1)?.type === "preview-ready";
 
@@ -61,7 +61,30 @@ export default function TaskView({ taskId }) {
     >
       <div className="task-view-thread-region">
         {timeline ? (
-          <ChatThread timeline={timeline} />
+          <ChatThread
+            timeline={timeline}
+            onAccept={
+              previewReady && task?.id
+                ? async () => {
+                    if (isAccepting) {
+                      return;
+                    }
+
+                    setIsAccepting(true);
+                    try {
+                      await api.acceptTask(task.id);
+                      const refreshedTask = await api.getTask(task.id);
+                      setTask(refreshedTask);
+                    } catch (requestError) {
+                      handleError(requestError, setError);
+                    } finally {
+                      setIsAccepting(false);
+                    }
+                  }
+                : undefined
+            }
+            isAccepting={isAccepting}
+          />
         ) : (
           <div className="welcome-message">
             <h2>Hello</h2>
@@ -70,26 +93,17 @@ export default function TaskView({ taskId }) {
         )}
       </div>
 
-      {previewReady ? (
-        <ChangeDialog
-          task={task}
-          onAccept={() => {}}
-          onOpenPreview={() => {}}
-        />
-      ) : (
-        <MessageComposer
-          task={task}
-          onSubmit={async (message) => {
-            setPendingClientMessage(message);
-            try {
-              await api.replyToTask(task.id, message);
-            } finally {
-              setPendingClientMessage(null);
-            }
-          }}
-        />
-      )}
-
+      <MessageComposer
+        task={task}
+        onSubmit={async (message) => {
+          setPendingClientMessage(message);
+          try {
+            await api.replyToTask(task.id, message);
+          } finally {
+            setPendingClientMessage(null);
+          }
+        }}
+      />
     </section>
   );
 }

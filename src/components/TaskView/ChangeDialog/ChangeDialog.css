@@ -1,9 +1,33 @@
-.change-dialog {
-  display: block;
-  h2 {
-    width: 100%
+ `.change-dialog {
+  --gap: 14px; /* overrides global */
+
+  margin-bottom: var(--gap);
+
+  display: grid;
+  grid-template:
+    "icon  title    title"  auto
+    "icon  preview  accept" auto
+   / auto  auto     auto;
+  gap: var(--gap);
+  width: fit-content;
+  justify-items: start;
+
+  .title {
+    grid-area: title;
+    font-size: 16px;
+    line-height: 1;
+    /* margin-bottom: var(--gap); */
   }
-  href, button {
-    width: fit-content;
+
+  .icon {
+    grid-area: icon;
+  }
+
+  .preview {
+    grid-area: preview;
+  }
+
+  .accept {
+    grid-area: accept;
   }
 }

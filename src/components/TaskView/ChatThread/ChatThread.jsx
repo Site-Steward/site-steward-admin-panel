@@ -1,7 +1,9 @@
-import { useTimeline } from "../useTimeline";
+
+import ChangeDialog from "../ChangeDialog/ChangeDialog";
+
 import "./ChatThread.css";
 
-export default function ChatThread({ timeline }) {
+export default function ChatThread({ timeline, onAccept, isAccepting = false }) {
 
   return timeline ? (
     <div className="chat-thread" role="log" aria-live="polite">
@@ -9,15 +11,15 @@ export default function ChatThread({ timeline }) {
         switch (message.type) {
           case "user-request":
             return (
-              <div key={index} className="message user-request">
+              <p key={index} className="message user-request">
                   {message.request}
-              </div>
+              </p>
             );
 
           case "agent-response":
             return (
               <div key={index} className="message agent-response">
-                <div className="message-content">{message.response}</div>
+                <p>{message.response}</p>
               </div>
             );
 
@@ -38,12 +40,16 @@ export default function ChatThread({ timeline }) {
           case "preview-ready":
             return (
               <div key={index} className="message preview-ready">
+
+                <ChangeDialog
+                  previewUrl={message.previewUrl}
+                  onAccept={onAccept}
+                  onOpenPreview={() => {}}
+                  isAccepting={isAccepting}
+                />
+                  
                 <p>
-                  Preview is ready.{" "}
-                  <a href={message.previewUrl} target="_blank" rel="noreferrer">
-                    Open change preview
-                  </a>
-                  .
+                  Please let me know if you would like any adjustments.
                 </p>
               </div>
             );

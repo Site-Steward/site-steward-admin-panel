@@ -1,5 +1,8 @@
 .message-composer {
 
+  display: flex;
+  flex-direction: column;
+
   textarea {
     border: none;
     background: transparent;
