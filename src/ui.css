@@ -1,3 +1,11 @@
+
+a.ui-button {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+a.ui-button,
 button.ui {
   border: 1px solid var(--button-fill-primary);
   border-radius: 8px;
@@ -37,4 +45,12 @@ button.ui {
       border-color: var(--button-fill-secondary-hover);
     }
   }
+}
+
+.card {
+  margin-top: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  padding: var(--gap);
+  gap: var(--gap);
 }

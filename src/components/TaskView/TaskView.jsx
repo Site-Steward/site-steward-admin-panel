@@ -6,6 +6,7 @@ import MessageComposer from "./MessageComposer/MessageComposer.jsx";
 import { useTaskRefreshLoop } from "./useTaskRefreshLoop.js";
 import { useTimeline } from "./useTimeline.js";
 
+import stewardCounterLogo from "@/assets/counter_326x167.png";
 import "./TaskView.css";
 
 let activeTaskBootstrapPromise = null;
@@ -17,6 +18,7 @@ export default function TaskView({ taskId }) {
   const [isAccepting, setIsAccepting] = useState(false);
   const timeline = useTimeline({ task, pendingClientMessage });
   const previewReady = timeline?.at(-1)?.type === "preview-ready";
+  const taskTitle = task?.title || "New Task";
 
   console.log("timeline", timeline);
 
@@ -59,8 +61,10 @@ export default function TaskView({ taskId }) {
       aria-label="Task conversation"
       data-task-id={task?.id}
     >
+      <h2 className="task-title">{taskTitle}</h2>
+
       <div className="task-view-thread-region">
-        {timeline ? (
+        {timeline?.length > 0 ? (
           <ChatThread
             timeline={timeline}
             onAccept={
@@ -86,7 +90,8 @@ export default function TaskView({ taskId }) {
             isAccepting={isAccepting}
           />
         ) : (
-          <div className="welcome-message">
+            <div className="welcome-message">
+             <img src={stewardCounterLogo} alt="Steward Logo" className="logo" />
             <h2>Hello</h2>
             <p>How can I help you today?</p>
           </div>

@@ -1,10 +1,12 @@
-
 import ChangeDialog from "../ChangeDialog/ChangeDialog";
 
 import "./ChatThread.css";
 
-export default function ChatThread({ timeline, onAccept, isAccepting = false }) {
-
+export default function ChatThread({
+  timeline,
+  onAccept,
+  isAccepting = false,
+}) {
   return timeline ? (
     <div className="chat-thread" role="log" aria-live="polite">
       {timeline.map((message, index) => {
@@ -12,7 +14,7 @@ export default function ChatThread({ timeline, onAccept, isAccepting = false }) 
           case "user-request":
             return (
               <p key={index} className="message user-request">
-                  {message.request}
+                {message.request}
               </p>
             );
 
@@ -40,17 +42,14 @@ export default function ChatThread({ timeline, onAccept, isAccepting = false }) 
           case "preview-ready":
             return (
               <div key={index} className="message preview-ready">
-
                 <ChangeDialog
                   previewUrl={message.previewUrl}
                   onAccept={onAccept}
                   onOpenPreview={() => {}}
                   isAccepting={isAccepting}
                 />
-                  
-                <p>
-                  Please let me know if you would like any adjustments.
-                </p>
+
+                <p>Please let me know if you would like any adjustments.</p>
               </div>
             );
 

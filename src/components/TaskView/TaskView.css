@@ -22,17 +22,21 @@
   }
 
   .welcome-message {
-    flex: 1;
-    min-height: 0;
+    height: 100%;
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 8px;
-    overflow: auto;
+    align-items: center;
+    gap: var(--gap);
 
-    h2,
+    h2 {
+      font-size: 2.5rem;
+    }
+
     p {
-      margin: 0;
+      font-size: 1.5rem;
     }
   }
 }

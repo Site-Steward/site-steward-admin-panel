@@ -1,3 +1,123 @@
 .history-view {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-gap);
+  height: 100%;
+  padding: var(--gap);
+  overflow: auto;
+  background: var(--surface-default);
+  color: var(--text-secondary);
+
+  .history-view-header {
+
+    /* internal layout */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    /* typography */
+    h2,
+    p {
+      margin: 0;
+    }
+
+    p {
+      color: var(--text-muted);
+    }
+  }
+
+  .history-view-status {
+    margin: 0;
+    color: var(--text-muted);
+
+    &.error {
+      color: var(--alert-error-text);
+    }
+  }
+
+  .history-list {
+
+    /* external layout */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    /* internal layout */
+    display: flex;
+    flex-direction: column;
+    gap: var(--sm-gap);
+  }
+
+  .history-card {
+
+    /* external layout */
+    border: 1px solid var(--border-default);
+    border-radius: 14px;
+    padding: 14px 16px;
+
+    /* internal layout */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--md-gap);
+
+    /* decoration */
+    background: var(--surface-panel);
+  }
+
+  .history-card-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .history-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+
+    h3 {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+  }
+
+  .history-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .history-state {
+    border-radius: 999px;
+    padding: 4px 8px;
+    background: var(--surface-muted);
+    color: var(--text-subtle);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+
+    &.accepted,
+    &.accepted_deployed {
+      background: var(--alert-success-bg);
+      color: var(--alert-success-text);
+    }
+
+    &.rejected,
+    &.error {
+      background: var(--alert-warning-bg);
+      color: var(--alert-warning-text);
+    }
+  }
+
+  button.ui {
+    flex: 0 0 auto;
+  }
 }

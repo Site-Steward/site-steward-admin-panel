@@ -3,7 +3,7 @@ import VerifyCredentialsForm from "./VerifyCredentialsForm.jsx";
 import RequestResetForm from "./RequestResetForm.jsx";
 import SetPasswordForm from "./SetPasswordForm.jsx";
 import "./AuthView.css";
-import stewardCounterLogo from "../../assets/counter_326x167.png";
+import stewardCounterLogo from "@/assets/counter_326x167.png";
 import LogoutForm from "./LogoutForm.jsx";
 
 export default function AuthView({
