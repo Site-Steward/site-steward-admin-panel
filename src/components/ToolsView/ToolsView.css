@@ -1,3 +1,84 @@
 .tools-view {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-gap);
+  height: 100%;
+  padding: var(--gap);
+  overflow: auto;
+  background: var(--surface-default);
+  color: var(--text-secondary);
+
+  .tools-view-header {
+
+    /* internal layout */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    /* typography */
+    h2,
+    p {
+      margin: 0;
+    }
+
+    p {
+      color: var(--text-muted);
+    }
+  }
+
+  .tools-grid {
+
+    /* internal layout */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--md-gap);
+  }
+
+  .tool-card {
+
+    /* external layout */
+    border: 1px solid var(--border-default);
+    border-radius: 18px;
+    padding: 18px;
+
+    /* internal layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--md-gap);
+    min-height: 180px;
+
+    /* decoration */
+    background: linear-gradient(
+      180deg,
+      var(--surface-default) 0%,
+      var(--surface-panel) 100%
+    );
+    box-shadow: 0 10px 24px rgb(17 24 39 / 0.06);
+  }
+
+  .tool-card-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 18px;
+    }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+  }
+
+  button.ui {
+    align-self: flex-start;
+  }
 }
