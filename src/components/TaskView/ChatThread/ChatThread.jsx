@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 import ChangeDialog from "../ChangeDialog/ChangeDialog";
 
 import "./ChatThread.css";
@@ -7,101 +9,99 @@ export default function ChatThread({
   onAccept,
   isAccepting = false,
 }) {
-  return timeline ? (
+  const threadEndRef = useRef(null);
+
+  useEffect(() => {
+    threadEndRef.current?.scrollIntoView({
+      block: "end",
+      behavior: "smooth",
+    });
+  }, [isAccepting, timeline?.length, timeline?.at(-1)?.id]);
+
+  if (!timeline) {
+    return <div className="chat-thread no-task">Loading conversation...</div>;
+  }
+
+  return (
     <div className="chat-thread" role="log" aria-live="polite">
-      {timeline.map((message, index) => {
-        switch (message.type) {
-          case "user-request":
-            return (
-              <p key={index} className="message user-request">
-                {message.request}
-              </p>
-            );
-
-          case "agent-response":
-            return (
-              <div key={index} className="message agent-response">
-                <p>{message.response}</p>
-              </div>
-            );
-
-          case "agent-working":
-            return (
-              <div key={index} className="message agent-working">
-                {renderPromptStatus(message.prompt)}
-              </div>
-            );
-
-          case "building-preview":
-            return (
-              <div key={index} className="message building-preview">
-                <p>Response ready. Building change preview now.</p>
-              </div>
-            );
-
-          case "preview-ready":
-            return (
-              <div key={index} className="message preview-ready">
-                <ChangeDialog
-                  previewUrl={message.previewUrl}
-                  onAccept={onAccept}
-                  onOpenPreview={() => {}}
-                  isAccepting={isAccepting}
-                />
-
-                <p>Please let me know if you would like any adjustments.</p>
-              </div>
-            );
-
-          default:
-            return (
-              <div key={index} className="message error">
-                <p>Sorry, something went wrong with processing your request.</p>
-              </div>
-            );
-        }
-      })}
+      {timeline.map((message) => renderTimelineMessage(message, onAccept, isAccepting))}
+      <div ref={threadEndRef} className="thread-anchor" aria-hidden="true" />
     </div>
-  ) : (
-    <div className="chat-thread no-task">Loading...</div>
   );
 }
 
-function renderPromptStatus(prompt) {
-  switch (prompt?.state) {
-    case "pending":
+function renderTimelineMessage(message, onAccept, isAccepting) {
+  switch (message.type) {
+    case "user-request":
       return (
-        <p className="working-indicator" aria-live="polite">
-          <span className="working-label">Working on your request</span>
-          <span className="working-dots" aria-hidden="true">
-            ...
-          </span>
-        </p>
+        <div
+          key={message.id}
+          className={`message user-request${message.isPending ? " pending" : ""}`}
+        >
+          <p>{message.request}</p>
+        </div>
       );
 
-    case "building_preview":
-      return <p>Response ready. Building change preview now.</p>;
-
-    case "preview_ready":
-      return prompt?.preview_url ? (
-        <p>
-          Preview is ready.{" "}
-          <a href={prompt.preview_url} target="_blank" rel="noreferrer">
-            Open change preview
-          </a>
-          .
-        </p>
-      ) : (
-        <p>Preview is marked ready, but no preview link was found.</p>
+    case "agent-response":
+      return (
+        <div key={message.id} className="message agent-response">
+          <p>{message.response}</p>
+        </div>
       );
 
-    case "needs_more_info":
-      return <p>Waiting for more information to continue.</p>;
+    case "agent-working":
+    case "building-preview":
+      return renderProgressMessage(message);
 
-    case "error_build_failed":
-      return <p>Preview build failed. Please try again.</p>;
+    case "preview-ready":
+      return (
+        <div key={message.id} className="message preview-ready">
+          <ChangeDialog
+            previewUrl={message.previewUrl}
+            onAccept={onAccept}
+            onOpenPreview={() => {}}
+            isAccepting={isAccepting}
+          />
+          {message.note ? <p className="preview-note">{message.note}</p> : null}
+        </div>
+      );
 
+    case "error":
     default:
-      return null;
+      return (
+        <div key={message.id} className="message error">
+          <p>
+            {message.errorMessage ||
+              "Sorry, something went wrong with processing your request."}
+          </p>
+        </div>
+      );
   }
+}
+
+function renderProgressMessage(message) {
+  return (
+    <div
+      key={message.id}
+      className={`message ${message.type}`}
+      role="status"
+      aria-label={message.detail ? `${message.title}. ${message.detail}` : message.title}
+    >
+      <div className="status-heading">
+        <span className="status-title">{message.title}</span>
+        {message.animateDots ? (
+          <span className="working-dots" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        ) : null}
+      </div>
+      <div className="response-placeholder" aria-hidden="true">
+        <span className="placeholder-line primary" />
+        <span className="placeholder-line secondary" />
+        <span className="placeholder-line tertiary" />
+      </div>
+    </div>
+  );
 }

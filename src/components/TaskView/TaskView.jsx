@@ -4,6 +4,11 @@ import api from "@/util/siteStewardApiClient.js";
 import ChatThread from "./ChatThread/ChatThread.jsx";
 import MessageComposer from "./MessageComposer/MessageComposer.jsx";
 import { useTaskRefreshLoop } from "./useTaskRefreshLoop.js";
+import {
+  getLatestPrompt,
+  getPromptCount,
+  isPendingPromptSynced,
+} from "./timelineMessages.js";
 import { useTimeline } from "./useTimeline.js";
 
 import stewardCounterLogo from "@/assets/counter_326x167.png";
@@ -14,19 +19,22 @@ let activeTaskBootstrapPromise = null;
 export default function TaskView({ taskId }) {
   const [error, setError] = useState(null);
   const [task, setTask] = useState(null);
-  const [pendingClientMessage, setPendingClientMessage] = useState(null);
+  const [pendingPrompt, setPendingPrompt] = useState(null);
   const [isAccepting, setIsAccepting] = useState(false);
-  const timeline = useTimeline({ task, pendingClientMessage });
-  const previewReady = timeline?.at(-1)?.type === "preview-ready";
-
-  console.log("timeline", timeline);
+  const timeline = useTimeline({ task, pendingPrompt });
+  const latestPrompt = getLatestPrompt(task);
+  const previewReady =
+    !pendingPrompt &&
+    latestPrompt?.state === "preview_ready" &&
+    Boolean(latestPrompt?.preview_url);
 
   useEffect(() => {
-    if (taskId) {
-      return;
-    }
     let isCancelled = false;
-    getOrCreateActiveTaskOnce()
+    setError(null);
+    setTask(null);
+    setPendingPrompt(null);
+
+    loadTask(taskId)
       .then((task) => {
         if (!isCancelled) {
           setTask(task);
@@ -48,11 +56,19 @@ export default function TaskView({ taskId }) {
     task,
     onRefresh: (refreshedTask) => {
       setTask(refreshedTask);
+      setPendingPrompt((currentPendingPrompt) =>
+        isPendingPromptSynced(refreshedTask?.prompts, currentPendingPrompt)
+          ? null
+          : currentPendingPrompt,
+      );
     },
     onError: (error) => {
       console.error("Error refreshing task:", error);
     },
   });
+
+  const hasMessages = timeline?.length > 0;
+  const isLoadingTask = !task && !error;
 
   return (
     <section
@@ -63,7 +79,13 @@ export default function TaskView({ taskId }) {
       <h2 className="view-header">{task?.friendly_title || `New Task`}</h2>
 
       <div className="task-view-thread-region">
-        {timeline?.length > 0 ? (
+        {error ? (
+          <p className="task-view-status error" role="alert">
+            {error}
+          </p>
+        ) : null}
+
+        {hasMessages ? (
           <ChatThread
             timeline={timeline}
             onAccept={
@@ -88,9 +110,15 @@ export default function TaskView({ taskId }) {
             }
             isAccepting={isAccepting}
           />
+        ) : isLoadingTask && taskId ? (
+          <p className="task-view-status">Loading conversation...</p>
         ) : (
-            <div className="welcome-message">
-             <img src={stewardCounterLogo} alt="Steward Logo" className="logo" />
+          <div className="welcome-message">
+            <img
+              src={stewardCounterLogo}
+              alt="Steward Logo"
+              className="logo"
+            />
             <h2>Hello</h2>
             <p>How can I help you today?</p>
           </div>
@@ -100,11 +128,43 @@ export default function TaskView({ taskId }) {
       <MessageComposer
         task={task}
         onSubmit={async (message) => {
-          setPendingClientMessage(message);
+          const pendingMessage = {
+            id: getPendingPromptId(),
+            request: message,
+            expectedPromptIndex: null,
+          };
+
+          setError(null);
+          setPendingPrompt(pendingMessage);
+
           try {
-            await api.replyToTask(task.id, message);
-          } finally {
-            setPendingClientMessage(null);
+            const activeTask = await ensureTask({ task, taskId, setTask });
+            const syncedPendingMessage = {
+              ...pendingMessage,
+              expectedPromptIndex: getPromptCount(activeTask),
+            };
+
+            setPendingPrompt((currentPendingPrompt) =>
+              currentPendingPrompt?.id === pendingMessage.id
+                ? syncedPendingMessage
+                : currentPendingPrompt,
+            );
+
+            await api.replyToTask(activeTask.id, message);
+
+            const refreshedTask = await api.getTask(activeTask.id);
+            setTask(refreshedTask);
+            setPendingPrompt((currentPendingPrompt) =>
+              isPendingPromptSynced(
+                refreshedTask?.prompts,
+                currentPendingPrompt ?? syncedPendingMessage,
+              )
+                ? null
+                : (currentPendingPrompt ?? syncedPendingMessage),
+            );
+          } catch (requestError) {
+            handleError(requestError, setError);
+            setPendingPrompt(null);
           }
         }}
       />
@@ -123,6 +183,24 @@ async function getOrCreateActiveTask() {
   }
 }
 
+async function loadTask(taskId) {
+  if (taskId) {
+    return await api.getTask(taskId);
+  }
+
+  return await getOrCreateActiveTaskOnce();
+}
+
+async function ensureTask({ task, taskId, setTask }) {
+  if (task?.id) {
+    return task;
+  }
+
+  const resolvedTask = await loadTask(taskId);
+  setTask(resolvedTask);
+  return resolvedTask;
+}
+
 function getOrCreateActiveTaskOnce() {
   if (!activeTaskBootstrapPromise) {
     activeTaskBootstrapPromise = getOrCreateActiveTask().finally(() => {
@@ -136,4 +214,12 @@ function getOrCreateActiveTaskOnce() {
 function handleError(error, setError) {
   console.error("Error in TaskView:", error);
   setError("Sorry, something went wrong. Please try again.");
+}
+
+function getPendingPromptId() {
+  if (typeof crypto?.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return `pending-${Date.now()}`;
 }

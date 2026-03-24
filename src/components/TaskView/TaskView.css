@@ -16,6 +16,25 @@
     flex-direction: column;
   }
 
+  .task-view-status {
+
+    /* external layout */
+    margin: var(--md-gap) var(--md-gap) 0;
+
+    /* internal layout */
+    padding: 12px 14px;
+
+    /* decoration */
+    border-radius: 14px;
+    background: var(--surface-muted);
+    color: var(--text-muted);
+
+    &.error {
+      background: var(--alert-error-bg);
+      color: var(--alert-error-text);
+    }
+  }
+
   .message-composer {
     margin: var(--gap);
   }

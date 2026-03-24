@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import api from "@/util/siteStewardApiClient.js";
 
-const POLLING_INTERVAL_MS = 12000;
+const POLLING_INTERVAL_MS = 3000;
 
 /**
  * Custom React hook to manage a polling loop for refreshing a
@@ -9,6 +9,9 @@ const POLLING_INTERVAL_MS = 12000;
  */
 export function useTaskRefreshLoop({ task, onRefresh, onError }) {
   const taskId = task?.id;
+  const prompts = Array.isArray(task?.prompts) ? task.prompts : [];
+  const lastPrompt = prompts[prompts.length - 1];
+  const shouldPoll = shouldContinuePolling(lastPrompt);
 
   useEffect(() => {
     if (!taskId) {
@@ -25,14 +28,14 @@ export function useTaskRefreshLoop({ task, onRefresh, onError }) {
           return;
         }
 
-        const prompts = Array.isArray(refreshedTask?.prompts)
+        const refreshedPrompts = Array.isArray(refreshedTask?.prompts)
           ? refreshedTask.prompts
           : [];
-        const lastPrompt = prompts[prompts.length - 1];
+        const refreshedLastPrompt = refreshedPrompts[refreshedPrompts.length - 1];
 
         onRefresh(refreshedTask);
 
-        if (shouldContinuePolling(lastPrompt)) {
+        if (shouldContinuePolling(refreshedLastPrompt)) {
           timeoutId = setTimeout(loadTask, POLLING_INTERVAL_MS);
         }
       } catch (requestError) {
@@ -50,18 +53,15 @@ export function useTaskRefreshLoop({ task, onRefresh, onError }) {
       isCancelled = true;
       clearTimeout(timeoutId);
     };
-  }, [taskId]);
+  }, [taskId, shouldPoll, lastPrompt?.preview_url]);
 }
 
 function shouldContinuePolling(lastPrompt) {
-
-  return true;
-
   if (!lastPrompt) {
     return false;
   }
 
-  if (lastPrompt.state === "pending" && !lastPrompt.response) {
+  if (lastPrompt.state === "pending") {
     return true;
   }
 
