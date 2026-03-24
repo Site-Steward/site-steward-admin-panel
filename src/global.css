@@ -19,3 +19,9 @@ main {
 h2 {
   font-size: 16px;
 }
+
+.view-header {
+  width: 100%;
+  padding: var(--gap);
+  border-bottom: 1px solid var(--border-default);
+}

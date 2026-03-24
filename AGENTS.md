@@ -1,13 +1,5 @@
 # Agent instructions
 
-
-## Skills
-
-- skills located in `.agents/skills` found in project root
-- if even somewhat relevant to task, error on reading skill 
-- for debugging purposes explain if you are using or rejecting a each skill, on every request
-
-
 ## Coding Practices
 
 Prefer to extract lengthy functions into a separate module.

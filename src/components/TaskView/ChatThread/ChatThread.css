@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: var(--md-gap);
   padding-bottom: var(--md-gap);
+  margin: var(--md-gap);
 
   .message {
     
