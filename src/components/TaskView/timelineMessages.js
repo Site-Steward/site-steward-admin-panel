@@ -114,7 +114,6 @@ function buildPromptMessages(prompt, index) {
         id: `${promptKey}-error`,
         type: "error",
         errorMessage:
-          prompt?.error_message ||
           "Sorry, something went wrong while processing your request.",
       });
       break;
